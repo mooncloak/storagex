@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+    - alias: "developer@mooncloak.com"
+      website: "https://mooncloak.codes"
+contact:
+    - alias: "developer@mooncloak.com"
+      website: "https://mooncloak.codes"
+title: "storagex"
+type: "software"
+abstract: "Kotlin Multiplatform Storage Utilities."
+license: "Apache-2.0"
+keywords:
+    - "storage"
+    - "cache"
+    - "key-value"
+    - "database"
+    - "data layer"
+repository-code: "https://github.com/mooncloak/storagex"
+url: "https://github.com/mooncloak/storagex"

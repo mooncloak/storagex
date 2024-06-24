@@ -5,6 +5,7 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.dokka")
     id("storagex.multiplatform")
+    id("storagex.publish")
 }
 
 kotlin {

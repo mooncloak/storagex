@@ -2,82 +2,130 @@ package com.mooncloak.kodetools.storagex.keyvalue
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
 import org.w3c.dom.Storage
 import org.w3c.dom.get
 import org.w3c.dom.set
-import kotlin.reflect.KClass
 
 @Suppress("FunctionName")
 public fun KeyValueStorage.Companion.LocalStorage(
     format: StringFormat,
     localStorage: Storage
-): KeyValueStorage = LocalStorageKeyValueStorage(
+): KeyValueStorage<String> = LocalStorageKeyValueStorage(
     format = format,
     localStorage = localStorage
 )
 
 internal class LocalStorageKeyValueStorage internal constructor(
-    private val format: StringFormat,
+    override val format: StringFormat,
     private val localStorage: Storage
-) : KeyValueStorage {
+) : MutableKeyValueStorage<String> {
 
     private val mutex = Mutex(locked = false)
 
-    override suspend fun count(): Long =
+    override suspend fun size(): Long =
         localStorage.length.toLong()
 
-    override suspend fun contains(key: String): Boolean =
-        localStorage[key] != null
+    override suspend fun entries(): Set<KeyValueStorage.Entry<String, *>> =
+        localStorageKeys().mapNotNull { key ->
+            val rawValue = localStorage[key]
 
-    override suspend fun <T : Any> get(
-        key: String,
-        deserializer: DeserializationStrategy<T>,
-        kClass: KClass<T>
-    ): T {
-        val encodedValue =
-            localStorage.getItem(key = key)
-                ?: throw NoSuchElementException("No stored value with key = $key")
+            rawValue?.let {
+                KeyValueStorage.Entry(
+                    key = key,
+                    rawValue = it,
+                    format = format
+                )
+            }
+        }.toSet()
 
-        return format.decodeFromString(
-            deserializer = deserializer,
-            string = encodedValue
+    override suspend fun getValue(key: String): KeyValueStorage.StoredValue<*> {
+        val rawValue = localStorage[key]
+            ?: throw NoSuchElementException("No entry found with key '$key'.")
+
+        return KeyValueStorage.StoredValue(
+            rawValue = rawValue,
+            format = format
         )
     }
 
-    override suspend fun <T : Any> set(
-        key: String,
-        serializer: SerializationStrategy<T>,
-        kClass: KClass<T>,
-        value: T?
-    ): Unit =
+    override suspend fun remove(key: String): KeyValueStorage.StoredValue<String>? =
         mutex.withLock {
+            val previousRawValue = localStorage[key]
+            val previousStoredValue = previousRawValue?.let {
+                KeyValueStorage.StoredValue(
+                    rawValue = it,
+                    format = format
+                )
+            }
+
+            localStorage.removeItem(key = key)
+
+            previousStoredValue
+        }
+
+    override suspend fun <Value : Any> put(
+        key: String,
+        serializer: SerializationStrategy<Value>,
+        value: Value?
+    ): KeyValueStorage.StoredValue<*>? =
+        mutex.withLock {
+            val previousRawValue = localStorage[key]
+            val previousStoredValue = previousRawValue?.let {
+                KeyValueStorage.StoredValue(
+                    rawValue = it,
+                    format = format
+                )
+            }
+
             if (value == null) {
-                localStorage.removeItem(key = key)
+                localStorage.removeItem(key)
             } else {
-                val encodedValue = format.encodeToString(
+                val rawValue = format.encodeToString(
                     serializer = serializer,
                     value = value
                 )
 
-                localStorage.set(
-                    key = key,
-                    value = encodedValue
-                )
+                localStorage[key] = rawValue
             }
+
+            previousStoredValue
         }
 
-    override suspend fun remove(key: String): Unit =
+    override suspend fun <Value> putAll(entries: Collection<MutableKeyValueStorage.InputEntry<String, Value>>) {
         mutex.withLock {
-            localStorage.removeItem(key = key)
+            entries.forEach { entry ->
+                val value = entry.inputValue.value
+
+                if (value == null) {
+                    localStorage.removeItem(entry.key)
+                } else {
+                    val rawValue = format.encodeToString(
+                        serializer = entry.inputValue.serializer,
+                        value = value
+                    )
+
+                    localStorage[entry.key] = rawValue
+                }
+            }
         }
+    }
 
     override suspend fun clear(): Unit =
         mutex.withLock {
             localStorage.clear()
         }
+
+    private fun localStorageKeys(): Set<String> {
+        val result = mutableSetOf<String>()
+
+        for (i in 0 until localStorage.length) {
+            localStorage.key(i)?.let { result.add(it) }
+        }
+
+        return result
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

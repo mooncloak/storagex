@@ -63,7 +63,7 @@ kotlin {
             }
         }
 
-        val iosMain by getting {
+        val appleMain by getting {
             dependencies {
                 // Settings - Multi-platform settings
                 // https://github.com/russhwolf/multiplatform-settings
@@ -73,27 +73,7 @@ kotlin {
             }
         }
 
-        val watchosMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
-
-        val tvosMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
-
-        val macosMain by getting {
+        val mingwMain by getting {
             dependencies {
                 // Settings - Multi-platform settings
                 // https://github.com/russhwolf/multiplatform-settings

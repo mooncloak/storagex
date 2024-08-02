@@ -2,434 +2,220 @@ package com.mooncloak.kodetools.storagex.keyvalue
 
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.contains
+import com.russhwolf.settings.get
+import com.russhwolf.settings.set
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationStrategy
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.StructureKind
-import kotlinx.serialization.encoding.AbstractDecoder
-import kotlinx.serialization.encoding.AbstractEncoder
-import kotlinx.serialization.encoding.CompositeDecoder
-import kotlinx.serialization.encoding.CompositeEncoder
-import kotlinx.serialization.modules.SerializersModule
-import kotlin.reflect.KClass
+import kotlinx.serialization.StringFormat
 
 @Suppress("FunctionName")
 public fun KeyValueStorage.Companion.Settings(
+    format: StringFormat,
     settings: Settings,
-    serializersModule: SerializersModule
-): KeyValueStorage = SettingsKeyValueStorage(
+    keyPrefix: String? = null
+): KeyValueStorage<String> = SettingsKeyValueStorage(
+    format = format,
     settings = settings,
-    serializersModule = serializersModule
+    keyPrefix = keyPrefix
 )
 
 internal class SettingsKeyValueStorage internal constructor(
+    override val format: StringFormat,
     private val settings: Settings,
-    private val serializersModule: SerializersModule
-) : KeyValueStorage {
+    private val keyPrefix: String? = null
+) : MutableKeyValueStorage<String> {
 
     private val mutex = Mutex(locked = false)
 
-    override suspend fun count(): Long = settings.size.toLong()
+    private val changes = MutableStateFlow<Pair<String, KeyValueStorage.StoredValue<*>?>?>(null)
 
-    override suspend fun contains(key: String): Boolean =
-        settings.contains(key)
+    override suspend fun size(): Long = settings.size.toLong()
 
-    @OptIn(ExperimentalSerializationApi::class)
-    override suspend fun <T : Any> get(
-        key: String,
-        deserializer: DeserializationStrategy<T>,
-        kClass: KClass<T>
-    ): T {
-        val decoder = SettingsDecoder(
-            settings = settings,
-            key = key,
-            serializersModule = serializersModule
+    override suspend fun entries(): Set<KeyValueStorage.Entry<String, *>> =
+        mutex.withLock {
+            return settings.keys.mapNotNull { key ->
+                val rawValue: String? = settings[key]
+                val storedValue = rawValue?.let {
+                    KeyValueStorage.StoredValue(
+                        rawValue = it,
+                        format = format
+                    )
+                }
+
+                storedValue?.let {
+                    KeyValueStorage.Entry(
+                        key = key,
+                        storedValue = it
+                    )
+                }
+            }.toSet()
+        }
+
+    override suspend fun getValue(key: String): KeyValueStorage.StoredValue<*> {
+        val rawValue: String = settings[key.asFormattedKey()]
+            ?: throw NoSuchElementException("No entry found with key '$key'.")
+
+        return KeyValueStorage.StoredValue(
+            rawValue = rawValue,
+            format = format
         )
-
-        return deserializer.deserializeOrElse(decoder, null)
-            ?: throw NoSuchElementException("No value stored with key = $key")
     }
 
-    @OptIn(ExperimentalSerializationApi::class)
-    override suspend fun <T : Any> set(
+    override suspend fun containsKey(key: String): Boolean =
+        settings.contains(key.asFormattedKey())
+
+    override fun changes(key: String): Flow<KeyValueStorage.StoredValue<*>?> =
+        changes.filter { pair -> key.asFormattedKey() == pair?.first }
+            .map { pair -> pair?.second }
+
+    override suspend fun <Value : Any> put(
         key: String,
-        serializer: SerializationStrategy<T>,
-        kClass: KClass<T>,
-        value: T?
-    ) {
+        serializer: SerializationStrategy<Value>,
+        value: Value?
+    ): KeyValueStorage.StoredValue<*>? =
         mutex.withLock {
+            val formattedKey = key.asFormattedKey()
+            val previousRawValue: String? = settings[formattedKey]
+            val previousStoredValue = previousRawValue?.let {
+                KeyValueStorage.StoredValue(
+                    rawValue = it,
+                    format = format
+                )
+            }
+
             if (value == null) {
-                settings.remove(key = key)
+                settings.remove(formattedKey)
+
+                emitChange(key = formattedKey, value = null)
             } else {
-                val encoder = SettingsEncoder(
-                    settings = settings,
-                    key = key,
-                    serializersModule = serializersModule
+                val rawValue = format.encodeToString(
+                    serializer = serializer,
+                    value = value
+                )
+                val storedValue = KeyValueStorage.StoredValue(
+                    rawValue = rawValue,
+                    format = format
                 )
 
-                serializer.serialize(encoder, value)
+                settings[formattedKey] = rawValue
+
+                emitChange(key = formattedKey, value = storedValue)
+            }
+
+            return previousStoredValue
+        }
+
+    override suspend fun <Value> putAll(entries: Collection<MutableKeyValueStorage.InputEntry<String, Value>>) {
+        mutex.withLock {
+            entries.forEach { entry ->
+                val formattedKey = entry.key.asFormattedKey()
+                val value = entry.inputValue.value
+
+                if (value == null) {
+                    settings.remove(formattedKey)
+
+                    emitChange(key = formattedKey, value = null)
+                } else {
+                    val rawValue = format.encodeToString(
+                        serializer = entry.inputValue.serializer,
+                        value = value
+                    )
+                    val storedValue = KeyValueStorage.StoredValue(
+                        rawValue = rawValue,
+                        format = format
+                    )
+
+                    settings[formattedKey] = rawValue
+
+                    emitChange(key = formattedKey, value = storedValue)
+                }
             }
         }
     }
 
-    override suspend fun remove(key: String) =
+    override suspend fun remove(key: String): KeyValueStorage.StoredValue<*>? =
         mutex.withLock {
-            settings.remove(key = key)
+            val formattedKey = key.asFormattedKey()
+            val previousRawValue: String? = settings[formattedKey]
+            val previousStoredValue = previousRawValue?.let {
+                KeyValueStorage.StoredValue(
+                    rawValue = it,
+                    format = format
+                )
+            }
+
+            settings.remove(formattedKey)
+
+            emitChange(key = formattedKey, value = null)
+
+            return previousStoredValue
         }
 
-    override suspend fun clear() =
+    override suspend fun clear() {
         mutex.withLock {
+            val entries = settings.keys.map { key ->
+                val rawValue: String? = settings[key]
+                val storedValue = rawValue?.let {
+                    KeyValueStorage.StoredValue(
+                        rawValue = it,
+                        format = format
+                    )
+                }
+
+                key to storedValue
+            }
+
             settings.clear()
-        }
-}
 
-// The following is code is adapted from the Multi-platform Settings library.
-
-@ExperimentalSerializationApi
-private class SettingsEncoder(
-    private val settings: Settings,
-    key: String,
-    public override val serializersModule: SerializersModule
-) : AbstractEncoder() {
-
-    // Stack of keys to track what we're encoding next
-    private val keyStack = ArrayDeque<String>().apply { add(key) }
-    private fun getKey() = keyStack.joinToString(".")
-
-    // Depth increases with beginStructure() and decreases with endStructure(). Subtly different from keyStack size.
-    // This is important so we can tell whether the last key on the stack refers to the current parent or a sibling.
-    private var depth = 0
-
-    public override fun encodeElement(descriptor: SerialDescriptor, index: Int): Boolean {
-        if (keyStack.size > depth) {
-            keyStack.removeLast()
-        }
-        keyStack.add(descriptor.getElementName(index))
-        return true
-    }
-
-
-    public override fun beginStructure(descriptor: SerialDescriptor): CompositeEncoder {
-        depth++
-        return super.beginStructure(descriptor)
-    }
-
-    public override fun endStructure(descriptor: SerialDescriptor) {
-        depth--
-        keyStack.removeLast()
-    }
-
-    public override fun beginCollection(
-        descriptor: SerialDescriptor,
-        collectionSize: Int
-    ): CompositeEncoder {
-        settings.putInt("${getKey()}.size", collectionSize)
-        return super.beginCollection(descriptor, collectionSize)
-    }
-
-    public override fun encodeNotNullMark() = settings.putBoolean("${getKey()}?", true)
-    public override fun encodeNull() {
-        settings.remove(getKey())
-        settings.putBoolean("${getKey()}?", false)
-    }
-
-    public override fun encodeBoolean(value: Boolean) = settings.putBoolean(getKey(), value)
-    public override fun encodeByte(value: Byte) = settings.putInt(getKey(), value.toInt())
-    public override fun encodeChar(value: Char) = settings.putInt(getKey(), value.code)
-    public override fun encodeDouble(value: Double) = settings.putDouble(getKey(), value)
-    public override fun encodeEnum(enumDescriptor: SerialDescriptor, index: Int) =
-        settings.putInt(getKey(), index)
-
-    public override fun encodeFloat(value: Float) = settings.putFloat(getKey(), value)
-    public override fun encodeInt(value: Int) = settings.putInt(getKey(), value)
-    public override fun encodeLong(value: Long) = settings.putLong(getKey(), value)
-    public override fun encodeShort(value: Short) = settings.putInt(getKey(), value.toInt())
-    public override fun encodeString(value: String) = settings.putString(getKey(), value)
-}
-
-@ExperimentalSerializationApi
-private class SettingsDecoder(
-    private val settings: Settings,
-    private val key: String,
-    public override val serializersModule: SerializersModule
-) : AbstractDecoder() {
-
-    // Stacks of keys and indices so we can track index at arbitrary levels to know what we're decoding next
-    private val keyStack = ArrayDeque<String>().apply { add(key) }
-    private val indexStack = ArrayDeque<Int>().apply { add(0) }
-    private fun getKey(): String = keyStack.joinToString(".")
-
-    // Depth increases with beginStructure() and decreases with endStructure(). Subtly different from stack sizes.
-    // This is important so we can tell whether the last items on the stack refer to the current parent or a sibling.
-    private var depth = 0
-
-
-    public override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
-        if (keyStack.size > depth) {
-            keyStack.removeLast()
-            indexStack.removeLast()
-        }
-
-        // Can usually ask descriptor for a size, except for collections
-        val size = when (descriptor.kind) {
-            StructureKind.LIST -> decodeCollectionSize(descriptor)
-            StructureKind.MAP -> 2 * decodeCollectionSize(descriptor) // Maps look like lists [k1, v1, k2, v2, ...]
-            else -> descriptor.elementsCount
-        }
-
-        return getNextIndex(descriptor, size)
-    }
-
-    private tailrec fun getNextIndex(descriptor: SerialDescriptor, size: Int): Int {
-        val index = indexStack.removeLast()
-        indexStack.addLast(index + 1)
-
-        return when {
-            index >= size -> CompositeDecoder.DECODE_DONE
-            isMissingAndOptional(descriptor, index) -> getNextIndex(descriptor, size)
-            else -> {
-                keyStack.add(descriptor.getElementName(index))
-                indexStack.add(0)
-                index
+            entries.forEach { pair ->
+                emitChange(
+                    key = pair.first,
+                    value = pair.second
+                )
             }
         }
     }
 
-    private inline fun isMissingAndOptional(descriptor: SerialDescriptor, index: Int): Boolean {
-        val key = "${getKey()}.${descriptor.getElementName(index)}"
-        // Descriptor shows key is optional, key is not present, and nullability doesn't indicate key should be present
-        return descriptor.isElementOptional(index) && key !in settings && settings.getBooleanOrNull(
-            "$key?"
-        ) != true
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is SettingsKeyValueStorage) return false
+
+        if (format != other.format) return false
+        if (settings != other.settings) return false
+        if (keyPrefix != other.keyPrefix) return false
+        if (mutex != other.mutex) return false
+
+        return changes == other.changes
     }
 
-
-    public override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
-        depth++
-        return super.beginStructure(descriptor)
+    override fun hashCode(): Int {
+        var result = format.hashCode()
+        result = 31 * result + settings.hashCode()
+        result = 31 * result + (keyPrefix?.hashCode() ?: 0)
+        result = 31 * result + mutex.hashCode()
+        result = 31 * result + changes.hashCode()
+        return result
     }
 
-    public override fun endStructure(descriptor: SerialDescriptor) {
-        depth--
-        keyStack.removeLast()
-        indexStack.removeLast()
-        if (keyStack.isEmpty()) {
-            // We've reached the end of everything, so reset for potential decoder reuse
-            keyStack.add(key)
-            indexStack.add(0)
+    override fun toString(): String =
+        "SettingsKeyValueStorage(format=$format, settings=$settings, keyPrefix=$keyPrefix, mutex=$mutex, changes=$changes)"
+
+    private suspend fun emitChange(
+        key: String,
+        value: KeyValueStorage.StoredValue<*>?
+    ) {
+        changes.emit(key to value)
+    }
+
+    private fun String.asFormattedKey(): String =
+        if (keyPrefix != null) {
+            "$keyPrefix$this"
+        } else {
+            this
         }
-    }
-
-    public override fun decodeCollectionSize(descriptor: SerialDescriptor): Int =
-        settings.getIntOrNull("${getKey()}.size") ?: deserializationError()
-
-    public override fun decodeNotNullMark(): Boolean =
-        settings.getBooleanOrNull("${getKey()}?") ?: deserializationError()
-
-    public override fun decodeNull(): Nothing? = null
-
-    // Unfortunately the only way we can interrupt serialization if data is missing is to throw here and catch elsewhere
-    public override fun decodeBoolean(): Boolean =
-        settings.getBooleanOrNull(getKey()) ?: deserializationError()
-
-    public override fun decodeByte(): Byte =
-        settings.getIntOrNull(getKey())?.toByte() ?: deserializationError()
-
-    public override fun decodeChar(): Char =
-        settings.getIntOrNull(getKey())?.toChar() ?: deserializationError()
-
-    public override fun decodeDouble(): Double =
-        settings.getDoubleOrNull(getKey()) ?: deserializationError()
-
-    public override fun decodeEnum(enumDescriptor: SerialDescriptor): Int =
-        settings.getIntOrNull(getKey()) ?: deserializationError()
-
-    public override fun decodeFloat(): Float =
-        settings.getFloatOrNull(getKey()) ?: deserializationError()
-
-    public override fun decodeInt(): Int = settings.getIntOrNull(getKey()) ?: deserializationError()
-    public override fun decodeLong(): Long =
-        settings.getLongOrNull(getKey()) ?: deserializationError()
-
-    public override fun decodeShort(): Short =
-        settings.getIntOrNull(getKey())?.toShort() ?: deserializationError()
-
-    public override fun decodeString(): String =
-        settings.getStringOrNull(getKey()) ?: deserializationError()
-
-    // Hook to reset state after we throw during deserializationError()
-    internal fun reset() {
-        keyStack.clear()
-        indexStack.clear()
-        depth = 0
-        keyStack.add(key)
-        indexStack.add(0)
-    }
 }
-
-// (Ab)uses Decoder machinery to enumerate all keys related to a serialized value, so they can be removed
-@ExperimentalSerializationApi
-private class SettingsRemover(
-    private val settings: Settings,
-    private val key: String,
-    public override val serializersModule: SerializersModule
-) : AbstractDecoder() {
-
-    private val keys = mutableListOf<String>()
-    fun removeKeys() {
-        for (key in keys) {
-            settings.remove(key)
-        }
-    }
-
-    // Stacks of keys and indices so we can track index at arbitrary levels to know what we're decoding next
-    private val keyStack = ArrayDeque<String>().apply { add(key) }
-    private val indexStack = ArrayDeque<Int>().apply { add(0) }
-    private fun getKey(): String = keyStack.joinToString(".")
-
-    // Depth increases with beginStructure() and decreases with endStructure(). Subtly different from stack sizes.
-    // This is important so we can tell whether the last items on the stack refer to the current parent or a sibling.
-    private var depth = 0
-
-
-    public override fun decodeElementIndex(descriptor: SerialDescriptor): Int {
-        if (keyStack.size > depth) {
-            keyStack.removeLast()
-            indexStack.removeLast()
-        }
-
-        // Can usually ask descriptor for a size, except for collections
-        val size = when (descriptor.kind) {
-            StructureKind.LIST -> decodeCollectionSize(descriptor)
-            StructureKind.MAP -> 2 * decodeCollectionSize(descriptor) // Maps look like lists [k1, v1, k2, v2, ...]
-            else -> descriptor.elementsCount
-        }
-
-        return getNextIndex(descriptor, size)
-    }
-
-    private tailrec fun getNextIndex(descriptor: SerialDescriptor, size: Int): Int {
-        val index = indexStack.removeLast()
-        indexStack.addLast(index + 1)
-
-        return when {
-            index >= size -> CompositeDecoder.DECODE_DONE
-            isMissingAndOptional(descriptor, index) -> getNextIndex(descriptor, size)
-            else -> {
-                keyStack.add(descriptor.getElementName(index))
-                indexStack.add(0)
-                index
-            }
-        }
-    }
-
-    private inline fun isMissingAndOptional(descriptor: SerialDescriptor, index: Int): Boolean {
-        val key = "${getKey()}.${descriptor.getElementName(index)}"
-        // Descriptor shows key is optional, key is not present, and nullability doesn't indicate key should be present
-        val output =
-            descriptor.isElementOptional(index) && key !in settings && settings.getBooleanOrNull("$key?") != true
-        keys.add(key)
-        keys.add("$key?")
-        return output
-    }
-
-
-    public override fun beginStructure(descriptor: SerialDescriptor): CompositeDecoder {
-        depth++
-        return super.beginStructure(descriptor)
-    }
-
-    public override fun endStructure(descriptor: SerialDescriptor) {
-        depth--
-        keyStack.removeLast()
-        indexStack.removeLast()
-        if (keyStack.isEmpty()) {
-            // We've reached the end of everything, so reset for potential decoder reuse
-            keyStack.add(key)
-            indexStack.add(0)
-        }
-    }
-
-    public override fun decodeCollectionSize(descriptor: SerialDescriptor): Int {
-        val output = settings.getInt("${getKey()}.size", 0)
-        keys.add("${getKey()}.size")
-        return output
-    }
-
-    public override fun decodeNotNullMark(): Boolean {
-        val output = settings.getBoolean("${getKey()}?", false)
-        keys.add("${getKey()}?")
-        return output
-    }
-
-    public override fun decodeNull(): Nothing? = null
-
-    public override fun decodeBoolean(): Boolean {
-        keys.add(getKey())
-        return false
-    }
-
-    public override fun decodeByte(): Byte {
-        keys.add(getKey())
-        return 0
-    }
-
-    public override fun decodeChar(): Char {
-        keys.add(getKey())
-        return '0'
-    }
-
-    public override fun decodeDouble(): Double {
-        keys.add(getKey())
-        return 0.0
-    }
-
-    public override fun decodeEnum(enumDescriptor: SerialDescriptor): Int {
-        keys.add(getKey())
-        return 0
-    }
-
-    public override fun decodeFloat(): Float {
-        keys.add(getKey())
-        return 0f
-    }
-
-    public override fun decodeInt(): Int {
-        keys.add(getKey())
-        return 0
-    }
-
-    public override fun decodeLong(): Long {
-        keys.add(getKey())
-        return 0
-    }
-
-    public override fun decodeShort(): Short {
-        keys.add(getKey())
-        return 0
-    }
-
-    public override fun decodeString(): String {
-        keys.add(getKey())
-        return ""
-    }
-}
-
-private class DeserializationException : IllegalStateException()
-
-private inline fun deserializationError(): Nothing = throw DeserializationException()
-
-@ExperimentalSerializationApi
-private inline fun <V, T : V> DeserializationStrategy<T>.deserializeOrElse(
-    decoder: SettingsDecoder,
-    defaultValue: V
-): V =
-    try {
-        deserialize(decoder)
-    } catch (_: DeserializationException) {
-        decoder.reset()
-        defaultValue
-    }

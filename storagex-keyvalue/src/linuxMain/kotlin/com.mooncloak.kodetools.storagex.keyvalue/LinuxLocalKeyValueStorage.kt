@@ -4,5 +4,5 @@ import kotlinx.serialization.StringFormat
 
 // FIXME: Linux is using in-memory as default
 @Suppress("FunctionName")
-public actual fun KeyValueStorage.Companion.Local(format: StringFormat): KeyValueStorage<String> =
+public actual fun KeyValueStorage.Companion.Local(format: StringFormat): MutableKeyValueStorage<String> =
     InMemory()

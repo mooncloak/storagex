@@ -18,7 +18,7 @@ public fun KeyValueStorage.Companion.Settings(
     format: StringFormat,
     settings: Settings,
     keyPrefix: String? = null
-): KeyValueStorage<String> = SettingsKeyValueStorage(
+): MutableKeyValueStorage<String> = SettingsKeyValueStorage(
     format = format,
     settings = settings,
     keyPrefix = keyPrefix

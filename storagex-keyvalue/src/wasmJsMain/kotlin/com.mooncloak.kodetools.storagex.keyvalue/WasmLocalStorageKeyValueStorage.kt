@@ -12,7 +12,7 @@ import org.w3c.dom.set
 public fun KeyValueStorage.Companion.LocalStorage(
     format: StringFormat,
     localStorage: Storage
-): KeyValueStorage<String> = LocalStorageKeyValueStorage(
+): MutableKeyValueStorage<String> = LocalStorageKeyValueStorage(
     format = format,
     localStorage = localStorage
 )

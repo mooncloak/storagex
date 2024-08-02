@@ -29,7 +29,7 @@ kotlin {
 
                 // Serialization
                 // https://github.com/Kotlin/kotlinx.serialization
-                api(KotlinX.serialization.core)
+                implementation(KotlinX.serialization.core)
 
                 // Time
                 // https://github.com/Kotlin/kotlinx-datetime
@@ -42,52 +42,12 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-
-        val jvmMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
-
-        val androidMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
-
-        val appleMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
-
-        val mingwMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
     }
 }
 
 android {
     compileSdk = LibraryConstants.Android.compileSdkVersion
-    namespace = "com.mooncloak.kodetools.storagex.keyvalue"
+    namespace = "com.mooncloak.kodetools.storagex.pagination"
 
     defaultConfig {
         minSdk = LibraryConstants.Android.minSdkVersion

@@ -23,17 +23,11 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                api(project(":storagex-keyvalue"))
+
                 // Coroutines
                 // https://github.com/Kotlin/kotlinx.coroutines
                 implementation(KotlinX.coroutines.core)
-
-                // Serialization
-                // https://github.com/Kotlin/kotlinx.serialization
-                api(KotlinX.serialization.core)
-
-                // Time
-                // https://github.com/Kotlin/kotlinx-datetime
-                implementation(KotlinX.datetime)
             }
         }
 
@@ -45,41 +39,11 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
             }
         }
 
         val androidMain by getting {
             dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
-
-        val appleMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
-            }
-        }
-
-        val mingwMain by getting {
-            dependencies {
-                // Settings - Multi-platform settings
-                // https://github.com/russhwolf/multiplatform-settings
-                api(RussHWolf.multiplatformSettings.settings)
-                api(RussHWolf.multiplatformSettings.noArg)
-                api(RussHWolf.multiplatformSettings.serialization)
             }
         }
     }
@@ -87,7 +51,7 @@ kotlin {
 
 android {
     compileSdk = LibraryConstants.Android.compileSdkVersion
-    namespace = "com.mooncloak.kodetools.storagex.keyvalue"
+    namespace = "com.mooncloak.kodetools.storagex.keyvalue.redis"
 
     defaultConfig {
         minSdk = LibraryConstants.Android.minSdkVersion

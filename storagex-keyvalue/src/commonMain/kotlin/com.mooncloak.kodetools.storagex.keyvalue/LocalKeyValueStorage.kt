@@ -7,4 +7,4 @@ import kotlinx.serialization.StringFormat
  * and deserialization of the stored values.
  */
 @Suppress("FunctionName")
-public expect fun KeyValueStorage.Companion.Local(format: StringFormat): KeyValueStorage<String>
+public expect fun KeyValueStorage.Companion.Local(format: StringFormat): MutableKeyValueStorage<String>

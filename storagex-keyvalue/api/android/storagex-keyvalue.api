@@ -1,10 +1,10 @@
 public final class com/mooncloak/kodetools/storagex/keyvalue/AndroidDefaultKeyValueStorageKt {
-	public static final fun Local (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;
+	public static final fun Local (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/AndroidSettingsKeyValueStorageKt {
-	public static final fun Settings (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;Lcom/russhwolf/settings/Settings;Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;
-	public static synthetic fun Settings$default (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;Lcom/russhwolf/settings/Settings;Ljava/lang/String;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;
+	public static final fun Settings (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;Lcom/russhwolf/settings/Settings;Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;
+	public static synthetic fun Settings$default (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;Lcom/russhwolf/settings/Settings;Ljava/lang/String;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/CachedValue {

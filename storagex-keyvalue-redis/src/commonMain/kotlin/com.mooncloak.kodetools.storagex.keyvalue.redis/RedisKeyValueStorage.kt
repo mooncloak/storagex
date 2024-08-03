@@ -8,7 +8,7 @@ import kotlinx.serialization.serializer
 import kotlin.reflect.KClass
 import kotlin.time.Duration
 
-public interface RedisKeyValueStorage : KeyValueStorage<String> {
+public interface RedisKeyValueStorage : MutableKeyValueStorage<String> {
 
     /**
      * Sets the value for the provided [key] to be equal to the provided [value], using the

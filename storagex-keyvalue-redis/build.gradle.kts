@@ -39,6 +39,9 @@ kotlin {
 
         val jvmMain by getting {
             dependencies {
+                // Redis Database Client - Lettus
+                // https://lettuce.io
+                api("io.lettuce:lettuce-core:_")
             }
         }
 

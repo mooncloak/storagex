@@ -28,6 +28,78 @@ public final class com/mooncloak/kodetools/storagex/pagination/Cursor$Companion 
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
+public final class com/mooncloak/kodetools/storagex/pagination/DefaultPageCollection : com/mooncloak/kodetools/storagex/pagination/PageCollection {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection$Companion;
+	public fun <init> (Ljava/util/List;)V
+	public final fun component1 ()Ljava/util/List;
+	public final fun copy (Ljava/util/List;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection;
+	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection;Ljava/util/List;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun getPages ()Ljava/util/List;
+	public fun hashCode ()I
+	public fun loadItems (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class com/mooncloak/kodetools/storagex/pagination/DefaultPageCollection$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public fun <init> (Lkotlinx/serialization/KSerializer;)V
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/DefaultPageCollection$Companion {
+	public final fun serializer (Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/DefaultPageKt {
+	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/pagination/PageCollection$Companion;Ljava/util/List;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection;
+	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/pagination/ResolvedPage$Companion;Ljava/lang/String;Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage;
+	public static synthetic fun invoke$default (Lcom/mooncloak/kodetools/storagex/pagination/PageCollection$Companion;Ljava/util/List;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultPageCollection;
+	public static synthetic fun invoke$default (Lcom/mooncloak/kodetools/storagex/pagination/ResolvedPage$Companion;Ljava/lang/String;Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage : com/mooncloak/kodetools/storagex/pagination/ResolvedPage {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage$Companion;
+	public fun <init> (Ljava/lang/String;Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;)V
+	public synthetic fun <init> (Ljava/lang/String;Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/String;
+	public final fun component2 ()Ljava/util/List;
+	public final fun component3 ()Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;
+	public final fun component4 ()Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
+	public final fun component5 ()Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
+	public final fun copy (Ljava/lang/String;Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage;
+	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage;Ljava/lang/String;Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getActual ()Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
+	public fun getInfo ()Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;
+	public fun getItems ()Ljava/util/List;
+	public final fun getOriginal ()Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
+	public fun getPageSourceId ()Ljava/lang/String;
+	public fun hashCode ()I
+	public fun loadItems (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class com/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public fun <init> (Lkotlinx/serialization/KSerializer;Lkotlinx/serialization/KSerializer;Lkotlinx/serialization/KSerializer;)V
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/DefaultResolvedPage$Companion {
+	public final fun serializer (Lkotlinx/serialization/KSerializer;Lkotlinx/serialization/KSerializer;Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
+}
+
 public final class com/mooncloak/kodetools/storagex/pagination/Direction : java/lang/Enum {
 	public static final field After Lcom/mooncloak/kodetools/storagex/pagination/Direction;
 	public static final field Before Lcom/mooncloak/kodetools/storagex/pagination/Direction;
@@ -38,12 +110,34 @@ public final class com/mooncloak/kodetools/storagex/pagination/Direction : java/
 }
 
 public final class com/mooncloak/kodetools/storagex/pagination/Direction$Companion {
+	public final fun get (Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/pagination/Direction;
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public final class com/mooncloak/kodetools/storagex/pagination/FilterKey {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/FilterKey$Companion;
-	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/pagination/FilterKey;
+public abstract interface class com/mooncloak/kodetools/storagex/pagination/Page {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/Page$Companion;
+	public abstract fun loadItems (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/Page$Companion {
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/pagination/PageCollection : com/mooncloak/kodetools/storagex/pagination/Page {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/PageCollection$Companion;
+	public abstract fun getPages ()Ljava/util/List;
+	public abstract fun loadItems (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PageCollection$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PageCollection$DefaultImpls {
+	public static fun loadItems (Lcom/mooncloak/kodetools/storagex/pagination/PageCollection;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PageCursor {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/PageCursor$Companion;
+	public static final synthetic fun box-impl (Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/pagination/PageCursor;
 	public static fun constructor-impl (Ljava/lang/String;)Ljava/lang/String;
 	public fun equals (Ljava/lang/Object;)Z
 	public static fun equals-impl (Ljava/lang/String;Ljava/lang/Object;)Z
@@ -56,113 +150,33 @@ public final class com/mooncloak/kodetools/storagex/pagination/FilterKey {
 	public final synthetic fun unbox-impl ()Ljava/lang/String;
 }
 
-public synthetic class com/mooncloak/kodetools/storagex/pagination/FilterKey$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/pagination/FilterKey$$serializer;
+public synthetic class com/mooncloak/kodetools/storagex/pagination/PageCursor$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/pagination/PageCursor$$serializer;
 	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
 	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun deserialize-OuRGmgE (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
+	public final fun deserialize-JghdlmQ (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/String;
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public final fun serialize-J9a2Ri4 (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
+	public final fun serialize-FJtB7KY (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/String;)V
 	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
-public final class com/mooncloak/kodetools/storagex/pagination/FilterKey$Companion {
+public final class com/mooncloak/kodetools/storagex/pagination/PageCursor$Companion {
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest : com/mooncloak/kodetools/storagex/pagination/PageRequest {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getCount-pVg5ArA ()I
-	public fun getCursor-I5IO5TU ()Ljava/lang/String;
-	public fun getDirection ()Lcom/mooncloak/kodetools/storagex/pagination/Direction;
-	public final fun getFilterKey-iAZ-tfU ()Ljava/lang/String;
-	public fun getQuery ()Ljava/lang/String;
-	public fun getSort ()Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public synthetic class com/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest$$serializer;
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest$Companion {
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mooncloak/kodetools/storagex/pagination/FilterPageRequest : com/mooncloak/kodetools/storagex/pagination/PageRequest {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/FilterPageRequest$Companion;
-	public synthetic fun <init> (Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public synthetic fun <init> (Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public fun getCount-pVg5ArA ()I
-	public fun getCursor-I5IO5TU ()Ljava/lang/String;
-	public fun getDirection ()Lcom/mooncloak/kodetools/storagex/pagination/Direction;
-	public final fun getFilter ()Ljava/lang/Object;
-	public fun getQuery ()Ljava/lang/String;
-	public fun getSort ()Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public synthetic class com/mooncloak/kodetools/storagex/pagination/FilterPageRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public fun <init> (Lkotlinx/serialization/KSerializer;)V
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/storagex/pagination/FilterPageRequest;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/pagination/FilterPageRequest;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public final fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mooncloak/kodetools/storagex/pagination/FilterPageRequest$Companion {
-	public final fun serializer (Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mooncloak/kodetools/storagex/pagination/Page {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/Page$Companion;
-	public fun <init> ()V
-	public fun <init> (Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;)V
-	public synthetic fun <init> (Ljava/util/List;Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun equals (Ljava/lang/Object;)Z
-	public final fun getInfo ()Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;
-	public final fun getItems ()Ljava/util/List;
-	public final fun getRequest ()Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
-	public fun hashCode ()I
-	public fun toString ()Ljava/lang/String;
-}
-
-public synthetic class com/mooncloak/kodetools/storagex/pagination/Page$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
-	public fun <init> (Lkotlinx/serialization/KSerializer;)V
-	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
-	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/storagex/pagination/Page;
-	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
-	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
-	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/pagination/Page;)V
-	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public final fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
-}
-
-public final class com/mooncloak/kodetools/storagex/pagination/Page$Companion {
-	public final fun serializer (Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
 }
 
 public final class com/mooncloak/kodetools/storagex/pagination/PageInfo {
 	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/PageInfo$Companion;
 	public synthetic fun <init> (Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lkotlin/UInt;Lkotlin/UInt;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lkotlin/UInt;Lkotlin/UInt;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Boolean;
+	public final fun component2 ()Ljava/lang/Boolean;
+	public final fun component3-I5IO5TU ()Ljava/lang/String;
+	public final fun component4-I5IO5TU ()Ljava/lang/String;
+	public final fun component5-0hXNFcg ()Lkotlin/UInt;
+	public final fun component6-0hXNFcg ()Lkotlin/UInt;
+	public final fun copy-TnbzG04 (Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lkotlin/UInt;Lkotlin/UInt;)Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;
+	public static synthetic fun copy-TnbzG04$default (Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;Ljava/lang/Boolean;Ljava/lang/Boolean;Ljava/lang/String;Ljava/lang/String;Lkotlin/UInt;Lkotlin/UInt;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getFirstCursor-I5IO5TU ()Ljava/lang/String;
 	public final fun getHasNext ()Ljava/lang/Boolean;
@@ -189,37 +203,118 @@ public final class com/mooncloak/kodetools/storagex/pagination/PageInfo$Companio
 	public final fun serializer ()Lkotlinx/serialization/KSerializer;
 }
 
-public abstract interface class com/mooncloak/kodetools/storagex/pagination/PageRequest {
+public abstract interface class com/mooncloak/kodetools/storagex/pagination/PagePlaceholder : com/mooncloak/kodetools/storagex/pagination/Page {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/PagePlaceholder$Companion;
+	public abstract fun getPageCursor--GwqEg4 ()Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PagePlaceholder$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PageRequest {
 	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/PageRequest$Companion;
 	public static final field DEFAULT_COUNT I
-	public abstract fun getCount-pVg5ArA ()I
-	public abstract fun getCursor-I5IO5TU ()Ljava/lang/String;
-	public abstract fun getDirection ()Lcom/mooncloak/kodetools/storagex/pagination/Direction;
-	public abstract fun getQuery ()Ljava/lang/String;
-	public abstract fun getSort ()Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;
+	public synthetic fun <init> (Ljava/lang/Object;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun <init> (Ljava/lang/Object;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun component2 ()Lcom/mooncloak/kodetools/storagex/pagination/Direction;
+	public final fun component3-I5IO5TU ()Ljava/lang/String;
+	public final fun component4-pVg5ArA ()I
+	public final fun component5 ()Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;
+	public final fun component6 ()Ljava/lang/Object;
+	public final fun copy-03-V308 (Ljava/lang/Object;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
+	public static synthetic fun copy-03-V308$default (Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Ljava/lang/Object;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getCount-pVg5ArA ()I
+	public final fun getCursor-I5IO5TU ()Ljava/lang/String;
+	public final fun getDirection ()Lcom/mooncloak/kodetools/storagex/pagination/Direction;
+	public final fun getFilters ()Ljava/lang/Object;
+	public final fun getRequest ()Ljava/lang/Object;
+	public final fun getSort ()Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class com/mooncloak/kodetools/storagex/pagination/PageRequest$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public fun <init> (Lkotlinx/serialization/KSerializer;Lkotlinx/serialization/KSerializer;)V
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class com/mooncloak/kodetools/storagex/pagination/PageRequest$Companion {
-	public static final field DEFAULT_COUNT I
-	public final fun serializer ()Lkotlinx/serialization/KSerializer;
+	public final fun serializer (Lkotlinx/serialization/KSerializer;Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
 }
 
-public final class com/mooncloak/kodetools/storagex/pagination/PageRequestKt {
-	public static final fun invoke-l0Q5Wek (Lcom/mooncloak/kodetools/storagex/pagination/PageRequest$Companion;Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/FilterPageRequest;
-	public static synthetic fun invoke-l0Q5Wek$default (Lcom/mooncloak/kodetools/storagex/pagination/PageRequest$Companion;Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/FilterPageRequest;
-	public static final fun invoke-r13JK5I (Lcom/mooncloak/kodetools/storagex/pagination/PageRequest$Companion;Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest;
-	public static synthetic fun invoke-r13JK5I$default (Lcom/mooncloak/kodetools/storagex/pagination/PageRequest$Companion;Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Ljava/lang/String;ILcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/String;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/FilterKeyPageRequest;
+public abstract interface class com/mooncloak/kodetools/storagex/pagination/PagedDataRepository {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/PagedDataRepository$Companion;
+	public abstract fun getSourceId ()Ljava/lang/String;
+	public abstract fun load-63ALS48 (Ljava/lang/Object;ILjava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun load-8KwEnfw (Ljava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class com/mooncloak/kodetools/storagex/pagination/PageUtilsKt {
-	public static final fun paginateAll (Lkotlin/jvm/functions/Function3;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun paginateFlow (Lkotlin/jvm/functions/Function3;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+public final class com/mooncloak/kodetools/storagex/pagination/PagedDataRepository$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PagedDataRepository$DefaultImpls {
+	public static synthetic fun load-63ALS48$default (Lcom/mooncloak/kodetools/storagex/pagination/PagedDataRepository;Ljava/lang/Object;ILjava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PagedDataRepositoryKt {
+	public static final fun after-w3eniI0 (Lcom/mooncloak/kodetools/storagex/pagination/PagedDataRepository;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun before-w3eniI0 (Lcom/mooncloak/kodetools/storagex/pagination/PagedDataRepository;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/pagination/Pager {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/Pager$Companion;
+	public abstract fun getLoading ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun getPages ()Lkotlinx/coroutines/flow/StateFlow;
+	public abstract fun invalidate (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun load-63ALS48 (Ljava/lang/Object;ILjava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun next (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun previous (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun refresh (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/Pager$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/Pager$DefaultImpls {
+	public static synthetic fun load-63ALS48$default (Lcom/mooncloak/kodetools/storagex/pagination/Pager;Ljava/lang/Object;ILjava/lang/String;Lcom/mooncloak/kodetools/storagex/pagination/Direction;Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/Object;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/PagerKt {
+	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/pagination/Pager$Companion;Ljava/util/List;)Lcom/mooncloak/kodetools/storagex/pagination/Pager;
+	public static final fun load (Lcom/mooncloak/kodetools/storagex/pagination/Pager;Lcom/mooncloak/kodetools/storagex/pagination/PageRequest;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/pagination/ResolvedPage : com/mooncloak/kodetools/storagex/pagination/Page {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/ResolvedPage$Companion;
+	public abstract fun getInfo ()Lcom/mooncloak/kodetools/storagex/pagination/PageInfo;
+	public abstract fun getItems ()Ljava/util/List;
+	public abstract fun getPageSourceId ()Ljava/lang/String;
+	public abstract fun loadItems (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/ResolvedPage$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/pagination/ResolvedPage$DefaultImpls {
+	public static fun loadItems (Lcom/mooncloak/kodetools/storagex/pagination/ResolvedPage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class com/mooncloak/kodetools/storagex/pagination/SortOptions {
 	public static final field Companion Lcom/mooncloak/kodetools/storagex/pagination/SortOptions$Companion;
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public synthetic fun <init> (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1-NeZemQQ ()Ljava/lang/String;
+	public final fun component2-GsReDIk ()Ljava/lang/String;
+	public final fun copy-z4K1EJQ (Ljava/lang/String;Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;
+	public static synthetic fun copy-z4K1EJQ$default (Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;Ljava/lang/String;Ljava/lang/String;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/pagination/SortOptions;
 	public fun equals (Ljava/lang/Object;)Z
 	public final fun getOrder-GsReDIk ()Ljava/lang/String;
 	public final fun getType-NeZemQQ ()Ljava/lang/String;

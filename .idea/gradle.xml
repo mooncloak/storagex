@@ -23,6 +23,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/storagex-keyvalue" />
+            <option value="$PROJECT_DIR$/storagex-keyvalue-redis" />
+            <option value="$PROJECT_DIR$/storagex-pagination" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

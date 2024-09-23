@@ -29,11 +29,11 @@ public value class Cursor public constructor(
 public inline fun <reified DecodedCursor> Cursor.Companion.encode(
     value: DecodedCursor,
     format: StringFormat
-): FilterKey {
+): Cursor {
     val formatString = format.encodeToString(value = value)
     val base64EncodedString = Base64.UrlSafe.encode(formatString.encodeToByteArray())
 
-    return FilterKey(value = base64EncodedString)
+    return Cursor(value = base64EncodedString)
 }
 
 @OptIn(ExperimentalEncodingApi::class)

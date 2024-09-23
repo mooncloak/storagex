@@ -1,0 +1,12 @@
+//[storagex-pagination](../../../../index.md)/[com.mooncloak.kodetools.storagex.pagination](../../index.md)/[Direction](../index.md)/[Companion](index.md)
+
+# Companion
+
+[common]\
+object [Companion](index.md)
+
+## Functions
+
+| Name | Summary |
+|---|---|
+| [get](get.md) | [common]<br>operator fun [get](get.md)(value: [String](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)): [Direction](../index.md)? |

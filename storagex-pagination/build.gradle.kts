@@ -29,7 +29,7 @@ kotlin {
 
                 // Serialization
                 // https://github.com/Kotlin/kotlinx.serialization
-                implementation(KotlinX.serialization.core)
+                implementation(KotlinX.serialization.json)
 
                 // Time
                 // https://github.com/Kotlin/kotlinx-datetime
@@ -47,7 +47,7 @@ kotlin {
             dependencies {
                 // Pagination - Jetpack Paging
                 // https://developer.android.com/topic/libraries/architecture/paging/v3-overview
-                implementation("androidx.paging:paging-common:_")
+                api("androidx.paging:paging-common:_")
                 implementation("androidx.paging:paging-runtime:_")
                 implementation("androidx.paging:paging-runtime:_")
                 implementation("androidx.paging:paging-runtime-ktx:_")

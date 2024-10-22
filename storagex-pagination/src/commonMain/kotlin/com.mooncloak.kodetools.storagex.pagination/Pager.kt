@@ -1,52 +1,80 @@
 package com.mooncloak.kodetools.storagex.pagination
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 
 /**
- * A stateful abstraction over one or more [PagedDataRepository] components.
+ * A stateful abstraction over one or more [PagedDataSource] components.
  */
 @ExperimentalPaginationAPI
-public interface Pager<Request, Filters, Result> {
+public interface Pager<Item> {
 
-    public val loading: StateFlow<Boolean>
+    /**
+     * The [Flow] of [PagerStateModel]s that get emitted when the data is updated by invoking the
+     * paging functions.
+     */
+    public val flow: Flow<PagerStateModel<Item>>
 
-    public val pages: StateFlow<List<Page<Result>>>
-
-    public suspend fun load(
-        request: Request,
-        count: UInt = 20u,
-        cursor: Cursor? = null,
-        direction: Direction = Direction.After,
-        sort: SortOptions? = null,
-        filters: Filters? = null
-    )
-
-    public suspend fun invalidate()
-
+    /**
+     * Refreshes the data by loading the initial paging data.
+     */
     public suspend fun refresh()
 
-    public suspend fun previous()
+    /**
+     * Loads at the start of the paging data.
+     */
+    public suspend fun prepend()
 
-    public suspend fun next()
+    /**
+     * Loads at the end of the paging data.
+     */
+    public suspend fun append()
+
+    public fun interface Loader<Data : Any, Filters : Any, Item> {
+
+        public fun load(
+            request: PageRequest<Data, Filters>,
+            coroutineScope: CoroutineScope
+        ): Pager<Item>
+
+        public companion object
+    }
 
     public companion object
 }
 
 @ExperimentalPaginationAPI
-public suspend inline fun <Request, Filters, Result> Pager<Request, Filters, Result>.load(
-    pageRequest: PageRequest<Request, Filters>
-): Unit = load(
-    request = pageRequest.request,
-    count = pageRequest.count,
-    cursor = pageRequest.cursor,
-    direction = pageRequest.direction,
-    sort = pageRequest.sort,
-    filters = pageRequest.filters
+public suspend fun <Data : Any, Filters : Any, Item> Pager.Loader<Data, Filters, Item>.load(
+    request: PageRequest<Data, Filters>
+): Pager<Item> = coroutineScope {
+    this@load.load(
+        request = request,
+        coroutineScope = this
+    )
+}
+
+@ExperimentalPaginationAPI
+public fun <Data : Any, Filters : Any, Item> Pager.Loader.Companion.create(
+    source: PagedDataSource<Data, Filters, Item>
+): Pager.Loader<Data, Filters, Item> = DefaultPagerLoader(
+    source = source
 )
 
 @ExperimentalPaginationAPI
-public operator fun <Request, Filters, Result> Pager.Companion.invoke(
-    sources: List<PagedDataRepository<Request, Filters, Result>>
-): Pager<Request, Filters, Result> = MultipleDataSourcePager(
-    sources = sources
-)
+public fun <Data : Any, Filters : Any, Item> Pager.Loader.Companion.create(
+    vararg sources: PagedDataSource<Data, Filters, Item>
+): Pager.Loader<Data, Filters, Item> = when {
+    sources.isEmpty() -> error("At least one `PagedDataSource` MUST be provided to the `Pager.Loader.create` function.")
+    sources.size == 1 -> DefaultPagerLoader(source = sources.first())
+    else -> DefaultPagerLoader(source = CombinedPagedDataSource(sources = sources.toList()))
+}
+
+@ExperimentalPaginationAPI
+public fun <Data : Any, Filters : Any, Item> Pager.Loader.Companion.create(
+    sources: Collection<PagedDataSource<Data, Filters, Item>>
+): Pager.Loader<Data, Filters, Item> = when {
+    sources.isEmpty() -> error("At least one `PagedDataSource` MUST be provided to the `Pager.Loader.create` function.")
+    sources.size == 1 -> DefaultPagerLoader(source = sources.first())
+    else -> DefaultPagerLoader(source = CombinedPagedDataSource(sources = sources.toList()))
+}

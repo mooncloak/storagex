@@ -31,7 +31,7 @@ public data class PageInfo public constructor(
     @SerialName(value = "first_cursor") public val firstCursor: Cursor? = null,
     @SerialName(value = "last_cursor") public val lastCursor: Cursor? = null,
     @SerialName(value = "count") public val returnedCount: UInt? = null,
-    @SerialName(value = "total") public val totalCount: UInt? = null,
+    @SerialName(value = "total") public val totalCount: UInt? = null
 ) {
 
     public companion object

@@ -23,6 +23,7 @@ import kotlinx.serialization.Serializable
  * @property [returnedCount] The amount of items returned in this page. This is provided as a
  * convenience and should always match the amount of items in the [Page.items] list.
  */
+@ExperimentalPaginationAPI
 @Serializable
 public data class PageInfo public constructor(
     @SerialName(value = "has_previous") public val hasPrevious: Boolean? = null,

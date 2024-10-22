@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 /**
  * A stateful abstraction over one or more [PagedDataRepository] components.
  */
+@ExperimentalPaginationAPI
 public interface Pager<Request, Filters, Result> {
 
     public val loading: StateFlow<Boolean>
@@ -31,6 +32,7 @@ public interface Pager<Request, Filters, Result> {
     public companion object
 }
 
+@ExperimentalPaginationAPI
 public suspend inline fun <Request, Filters, Result> Pager<Request, Filters, Result>.load(
     pageRequest: PageRequest<Request, Filters>
 ): Unit = load(
@@ -42,6 +44,7 @@ public suspend inline fun <Request, Filters, Result> Pager<Request, Filters, Res
     filters = pageRequest.filters
 )
 
+@ExperimentalPaginationAPI
 public operator fun <Request, Filters, Result> Pager.Companion.invoke(
     sources: List<PagedDataRepository<Request, Filters, Result>>
 ): Pager<Request, Filters, Result> = MultipleDataSourcePager(

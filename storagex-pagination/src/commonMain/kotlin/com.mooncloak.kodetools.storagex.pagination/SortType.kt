@@ -3,6 +3,7 @@ package com.mooncloak.kodetools.storagex.pagination
 import kotlinx.serialization.Serializable
 import kotlin.jvm.JvmInline
 
+@ExperimentalPaginationAPI
 @Serializable
 @JvmInline
 public value class SortType public constructor(

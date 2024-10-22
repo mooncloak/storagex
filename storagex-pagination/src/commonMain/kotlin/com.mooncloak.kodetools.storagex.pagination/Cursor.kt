@@ -16,6 +16,7 @@ import kotlin.jvm.JvmInline
  * perspective of the client, as it doesn't have to construct an instance of one, only use it as a
  * reference.
  */
+@ExperimentalPaginationAPI
 @JvmInline
 @Serializable
 public value class Cursor public constructor(
@@ -25,6 +26,7 @@ public value class Cursor public constructor(
     public companion object
 }
 
+@ExperimentalPaginationAPI
 @OptIn(ExperimentalEncodingApi::class)
 public inline fun <reified DecodedCursor> Cursor.Companion.encode(
     value: DecodedCursor,
@@ -36,6 +38,7 @@ public inline fun <reified DecodedCursor> Cursor.Companion.encode(
     return Cursor(value = base64EncodedString)
 }
 
+@ExperimentalPaginationAPI
 @OptIn(ExperimentalEncodingApi::class)
 public inline fun <reified DecodedCursor> Cursor.decode(format: StringFormat): DecodedCursor {
     val bytes = Base64.UrlSafe.decode(this.value)

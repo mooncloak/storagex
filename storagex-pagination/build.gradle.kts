@@ -42,6 +42,18 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+
+        val androidMain by getting {
+            dependencies {
+                // Pagination - Jetpack Paging
+                // https://developer.android.com/topic/libraries/architecture/paging/v3-overview
+                implementation("androidx.paging:paging-common:_")
+                implementation("androidx.paging:paging-runtime:_")
+                implementation("androidx.paging:paging-runtime:_")
+                implementation("androidx.paging:paging-runtime-ktx:_")
+                implementation("androidx.paging:paging-compose:_")
+            }
+        }
     }
 }
 

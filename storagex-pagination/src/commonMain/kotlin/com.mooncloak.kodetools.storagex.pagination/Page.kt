@@ -26,6 +26,7 @@ public sealed interface Page<Type> {
  *
  * @property [items] The [List] of data items for this page.
  */
+@ExperimentalPaginationAPI
 public interface ResolvedPage<Type> : Page<Type> {
 
     public val pageSourceId: String
@@ -45,6 +46,7 @@ public interface ResolvedPage<Type> : Page<Type> {
  * each of the local and remote data sets. This way, the loading of the individual [Page]s is data source specific, but
  * the overall pagination of the whole data can be represented with this [PageCursor] model.
  */
+@ExperimentalPaginationAPI
 public interface PageCollection<Type> : Page<Type> {
 
     public val pages: List<ResolvedPage<Type>>
@@ -72,6 +74,7 @@ public interface PageCollection<Type> : Page<Type> {
  * page data. This value could be a serialized form of a [Cursor] and [Direction], or contain more complex data, it is
  * up to the implementation to decide what data to store.
  */
+@ExperimentalPaginationAPI
 public interface PagePlaceholder<Type> : Page<Type> {
 
     public val pageCursor: PageCursor

@@ -19,6 +19,7 @@ import kotlinx.serialization.Serializable
  *
  * @property [filters] A model that filters the results of the pagination request.
  */
+@ExperimentalPaginationAPI
 @Serializable
 @SerialName(value = "filter")
 public data class PageRequest<Request, Filter> @PublishedApi internal constructor(

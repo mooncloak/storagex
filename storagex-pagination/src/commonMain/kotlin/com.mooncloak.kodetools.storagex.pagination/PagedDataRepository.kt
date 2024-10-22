@@ -3,6 +3,7 @@ package com.mooncloak.kodetools.storagex.pagination
 /**
  * A stateless repository abstraction over a data source whose underlying data can be paginated through.
  */
+@ExperimentalPaginationAPI
 public interface PagedDataRepository<Request, Filters, Result> {
 
     public val sourceId: String
@@ -24,6 +25,7 @@ public interface PagedDataRepository<Request, Filters, Result> {
     public companion object
 }
 
+@ExperimentalPaginationAPI
 public suspend inline fun <Result> PagedDataRepository<*, *, Result>.before(
     cursor: Cursor
 ): ResolvedPage<Result> = this.load(
@@ -31,6 +33,7 @@ public suspend inline fun <Result> PagedDataRepository<*, *, Result>.before(
     direction = Direction.Before
 )
 
+@ExperimentalPaginationAPI
 public suspend inline fun <Result> PagedDataRepository<*, *, Result>.after(
     cursor: Cursor
 ): ResolvedPage<Result> = this.load(

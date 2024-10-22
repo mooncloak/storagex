@@ -8,6 +8,7 @@ import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
+@ExperimentalPaginationAPI
 internal class MultipleDataSourcePager<Request, Filters, Result> internal constructor(
     private val sources: List<PagedDataRepository<Request, Filters, Result>>
 ) : Pager<Request, Filters, Result> {

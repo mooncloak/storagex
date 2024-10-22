@@ -6,6 +6,7 @@ import kotlinx.serialization.Serializable
 /**
  * Represents the direction to paginate information relative to a [Cursor] from a data source.
  */
+@ExperimentalPaginationAPI
 @Serializable
 public enum class Direction {
 

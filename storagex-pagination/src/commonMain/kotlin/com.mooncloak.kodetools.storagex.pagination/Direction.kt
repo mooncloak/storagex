@@ -8,23 +8,25 @@ import kotlinx.serialization.Serializable
  */
 @ExperimentalPaginationAPI
 @Serializable
-public enum class Direction {
+public enum class Direction(
+    public val serialName: String
+) {
 
     /**
      * Paginate before a provided [Cursor].
      */
     @SerialName(value = "before")
-    Before,
+    Before(serialName = "before"),
 
     /**
      * Paginate after a provided [Cursor].
      */
     @SerialName(value = "after")
-    After;
+    After(serialName = "after");
 
     public companion object {
 
         public operator fun get(value: String): Direction? =
-            Direction.entries.firstOrNull { it.name.equals(value, ignoreCase = true) }
+            Direction.entries.firstOrNull { it.serialName.equals(value, ignoreCase = true) }
     }
 }

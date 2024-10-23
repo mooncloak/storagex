@@ -19,9 +19,6 @@ import kotlinx.serialization.Serializable
  *
  * @property [totalCount] The total amount of items that can be queried and paginated through, or
  * `null` if the value is unknown.
- *
- * @property [returnedCount] The amount of items returned in this page. This is provided as a
- * convenience and should always match the amount of items in the [ResolvedPage.items] list.
  */
 @ExperimentalPaginationAPI
 @Serializable
@@ -30,7 +27,6 @@ public data class PageInfo public constructor(
     @SerialName(value = "has_next") public val hasNext: Boolean? = null,
     @SerialName(value = "first_cursor") public val firstCursor: Cursor? = null,
     @SerialName(value = "last_cursor") public val lastCursor: Cursor? = null,
-    @SerialName(value = "count") public val returnedCount: UInt? = null,
     @SerialName(value = "total") public val totalCount: UInt? = null
 ) {
 

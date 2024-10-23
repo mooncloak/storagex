@@ -5,7 +5,8 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 
 /**
- * A stateful abstraction over one or more [PagedDataSource] components.
+ * A stateful abstraction over one or more [PagedDataSource] components that can be used for
+ * pagination.
  */
 @ExperimentalPaginationAPI
 public interface Pager<Item> {
@@ -31,8 +32,18 @@ public interface Pager<Item> {
      */
     public suspend fun append()
 
+    /**
+     * A component that can create a [Pager] instance with an initial load request.
+     */
     public fun interface Loader<Data : Any, Filters : Any, Item> {
 
+        /**
+         * Creates and returns a new [Pager] instance that performs the provided initial [request].
+         *
+         * @param [request] The initial request that the [Pager] loads.
+         *
+         * @param [coroutineScope] The [CoroutineScope] that the initial [request] is launched in.
+         */
         public fun load(
             request: PageRequest<Data, Filters>,
             coroutineScope: CoroutineScope
@@ -44,11 +55,15 @@ public interface Pager<Item> {
     public companion object
 }
 
+/**
+ * Invokes the [Pager.Loader.load] function and waits for the request to finish loading before
+ * returning the resulting [Pager] instance.
+ */
 @ExperimentalPaginationAPI
-public suspend fun <Data : Any, Filters : Any, Item> Pager.Loader<Data, Filters, Item>.load(
+public suspend fun <Data : Any, Filters : Any, Item> Pager.Loader<Data, Filters, Item>.awaitLoad(
     request: PageRequest<Data, Filters>
 ): Pager<Item> = coroutineScope {
-    this@load.load(
+    this@awaitLoad.load(
         request = request,
         coroutineScope = this
     )

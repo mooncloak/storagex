@@ -2,6 +2,8 @@ package com.mooncloak.kodetools.storagex.pagination
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Represents a page of information loaded from a paginated data source.
@@ -100,9 +102,10 @@ public data class DefaultPagePlaceholder<Item> @PublishedApi internal constructo
  *
  * @see [ResolvedPage]
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline operator fun <Item> ResolvedPage.Companion.invoke(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     dataSourceId: String? = null,
     pageCursor: Cursor? = null,
     items: List<Item> = emptyList(),
@@ -120,9 +123,10 @@ public inline operator fun <Item> ResolvedPage.Companion.invoke(
  *
  * @see [ResolvedPage]
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline operator fun <Request : Any, Filter : Any, Item> ResolvedPage.Companion.invoke(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     dataSourceId: String? = null,
     pageCursor: Cursor? = null,
     items: List<Item> = emptyList(),
@@ -144,9 +148,10 @@ public inline operator fun <Request : Any, Filter : Any, Item> ResolvedPage.Comp
  *
  * @see [PageCollection]
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline operator fun <Item> PageCollection.Companion.invoke(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     pageCursor: Cursor,
     dataSourceId: String? = null,
     pages: List<ResolvedPage<Item>> = emptyList()
@@ -162,9 +167,10 @@ public inline operator fun <Item> PageCollection.Companion.invoke(
  *
  * @see [PagePlaceholder]
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline operator fun <Item> PagePlaceholder.Companion.invoke(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     pageCursor: Cursor? = null,
     noinline getter: suspend () -> ResolvedPage<Item>
 ): DefaultPagePlaceholder<Item> = DefaultPagePlaceholder(

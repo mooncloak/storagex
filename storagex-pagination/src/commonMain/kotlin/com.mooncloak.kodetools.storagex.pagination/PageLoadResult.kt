@@ -2,6 +2,8 @@ package com.mooncloak.kodetools.storagex.pagination
 
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Represents a result that can be returned from the [PagedDataSource.load] function.
@@ -33,21 +35,23 @@ public inline fun <Item> PageLoadResult.Companion.error(
 public inline fun <Item> PageLoadResult.Companion.emptyPage(
     dataSourceId: String? = null,
     pageCursor: Cursor? = null,
-    id: String = "EmptyPage"
+    id: String = "EmptyPage",
+    info: PageInfo = PageInfo()
 ): DefaultResolvedPage<Item> = ResolvedPage.invoke(
     dataSourceId = dataSourceId,
     pageCursor = pageCursor,
     id = id,
     items = emptyList(),
-    info = PageInfo()
+    info = info
 )
 
 /**
  * A convenience function for creating a [DefaultResolvedPage] instance.
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline fun <Item> PageLoadResult.Companion.page(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     dataSourceId: String? = null,
     pageCursor: Cursor? = null,
     info: PageInfo = PageInfo(),
@@ -63,9 +67,10 @@ public inline fun <Item> PageLoadResult.Companion.page(
 /**
  * A convenience function for creating a [DefaultResolvedPageWithRequestData] instance.
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline fun <Data : Any, Filters : Any, Item> PageLoadResult.Companion.page(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     dataSourceId: String? = null,
     pageCursor: Cursor? = null,
     info: PageInfo = PageInfo(),
@@ -85,9 +90,10 @@ public inline fun <Data : Any, Filters : Any, Item> PageLoadResult.Companion.pag
 /**
  * A convenience function for creating a [DefaultPageCollection] instance.
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline fun <Item> PageLoadResult.Companion.pageCollection(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     pageCursor: Cursor,
     pages: List<ResolvedPage<Item>> = emptyList(),
     dataSourceId: String? = null,
@@ -101,9 +107,10 @@ public inline fun <Item> PageLoadResult.Companion.pageCollection(
 /**
  * A convenience function for creating a [DefaultPagePlaceholder] instance.
  */
+@OptIn(ExperimentalUuidApi::class)
 @ExperimentalPaginationAPI
 public inline fun <Item> PageLoadResult.Companion.pagePlaceholder(
-    id: String,
+    id: String = Uuid.random().toHexString(),
     pageCursor: Cursor? = null,
     noinline getter: suspend () -> ResolvedPage<Item>
 ): DefaultPagePlaceholder<Item> = PagePlaceholder.invoke(

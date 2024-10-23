@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
  * `null` if the value is unknown.
  *
  * @property [returnedCount] The amount of items returned in this page. This is provided as a
- * convenience and should always match the amount of items in the [Page.items] list.
+ * convenience and should always match the amount of items in the [ResolvedPage.items] list.
  */
 @ExperimentalPaginationAPI
 @Serializable

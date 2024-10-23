@@ -24,6 +24,7 @@ import kotlinx.serialization.Serializable
 public data class DefaultResolvedPage<Item> @PublishedApi internal constructor(
     @SerialName(value = "id") public override val id: String,
     @SerialName(value = "source_id") public override val dataSourceId: String? = null,
+    @SerialName(value = "page_cursor") public override val pageCursor: Cursor? = null,
     @SerialName(value = "items") public override val items: List<Item> = emptyList(),
     @SerialName(value = "info") public override val info: PageInfo = PageInfo()
 ) : ResolvedPage<Item>
@@ -56,6 +57,7 @@ public data class DefaultResolvedPage<Item> @PublishedApi internal constructor(
 public data class DefaultResolvedPageWithRequestData<Request : Any, Filter : Any, Item> @PublishedApi internal constructor(
     @SerialName(value = "id") public override val id: String,
     @SerialName(value = "source_id") public override val dataSourceId: String? = null,
+    @SerialName(value = "page_cursor") public override val pageCursor: Cursor? = null,
     @SerialName(value = "items") public override val items: List<Item> = emptyList(),
     @SerialName(value = "info") public override val info: PageInfo = PageInfo(),
     @SerialName(value = "original") public val original: PageRequest<Request, Filter>? = null,
@@ -71,9 +73,9 @@ public data class DefaultResolvedPageWithRequestData<Request : Any, Filter : Any
 @Serializable
 public data class DefaultPageCollection<Item> @PublishedApi internal constructor(
     @SerialName(value = "id") public override val id: String,
-    @SerialName(value = "pages") public override val pages: List<ResolvedPage<Item>>,
+    @SerialName(value = "page_cursor") public override val pageCursor: Cursor,
     @SerialName(value = "source_id") public override val dataSourceId: String? = null,
-    @SerialName(value = "page_cursor") public override val pageCursor: PageCursor
+    @SerialName(value = "pages") public override val pages: List<ResolvedPage<Item>> = emptyList()
 ) : PageCollection<Item>
 
 /**
@@ -84,7 +86,7 @@ public data class DefaultPageCollection<Item> @PublishedApi internal constructor
 @ExperimentalPaginationAPI
 public data class DefaultPagePlaceholder<Item> @PublishedApi internal constructor(
     public override val id: String,
-    override val pageCursor: PageCursor,
+    override val pageCursor: Cursor? = null,
     override val dataSourceId: String? = null,
     private val getter: suspend () -> ResolvedPage<Item>
 ) : PagePlaceholder<Item> {
@@ -102,11 +104,13 @@ public data class DefaultPagePlaceholder<Item> @PublishedApi internal constructo
 public inline operator fun <Item> ResolvedPage.Companion.invoke(
     id: String,
     dataSourceId: String? = null,
+    pageCursor: Cursor? = null,
     items: List<Item> = emptyList(),
     info: PageInfo = PageInfo()
 ): DefaultResolvedPage<Item> = DefaultResolvedPage(
     id = id,
     dataSourceId = dataSourceId,
+    pageCursor = pageCursor,
     items = items,
     info = info
 )
@@ -120,6 +124,7 @@ public inline operator fun <Item> ResolvedPage.Companion.invoke(
 public inline operator fun <Request : Any, Filter : Any, Item> ResolvedPage.Companion.invoke(
     id: String,
     dataSourceId: String? = null,
+    pageCursor: Cursor? = null,
     items: List<Item> = emptyList(),
     info: PageInfo = PageInfo(),
     original: PageRequest<Request, Filter>? = null,
@@ -127,6 +132,7 @@ public inline operator fun <Request : Any, Filter : Any, Item> ResolvedPage.Comp
 ): DefaultResolvedPageWithRequestData<Request, Filter, Item> = DefaultResolvedPageWithRequestData(
     id = id,
     dataSourceId = dataSourceId,
+    pageCursor = pageCursor,
     items = items,
     info = info,
     original = original,
@@ -141,9 +147,9 @@ public inline operator fun <Request : Any, Filter : Any, Item> ResolvedPage.Comp
 @ExperimentalPaginationAPI
 public inline operator fun <Item> PageCollection.Companion.invoke(
     id: String,
-    pages: List<ResolvedPage<Item>> = emptyList(),
+    pageCursor: Cursor,
     dataSourceId: String? = null,
-    pageCursor: PageCursor
+    pages: List<ResolvedPage<Item>> = emptyList()
 ): DefaultPageCollection<Item> = DefaultPageCollection(
     id = id,
     pages = pages,
@@ -159,7 +165,7 @@ public inline operator fun <Item> PageCollection.Companion.invoke(
 @ExperimentalPaginationAPI
 public inline operator fun <Item> PagePlaceholder.Companion.invoke(
     id: String,
-    pageCursor: PageCursor,
+    pageCursor: Cursor? = null,
     noinline getter: suspend () -> ResolvedPage<Item>
 ): DefaultPagePlaceholder<Item> = DefaultPagePlaceholder(
     id = id,

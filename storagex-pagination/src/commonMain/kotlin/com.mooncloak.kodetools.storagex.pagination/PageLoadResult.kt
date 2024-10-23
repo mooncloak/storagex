@@ -32,9 +32,11 @@ public inline fun <Item> PageLoadResult.Companion.error(
 @ExperimentalPaginationAPI
 public inline fun <Item> PageLoadResult.Companion.emptyPage(
     dataSourceId: String? = null,
+    pageCursor: Cursor? = null,
     id: String = "EmptyPage"
 ): DefaultResolvedPage<Item> = ResolvedPage.invoke(
     dataSourceId = dataSourceId,
+    pageCursor = pageCursor,
     id = id,
     items = emptyList(),
     info = PageInfo()
@@ -47,11 +49,13 @@ public inline fun <Item> PageLoadResult.Companion.emptyPage(
 public inline fun <Item> PageLoadResult.Companion.page(
     id: String,
     dataSourceId: String? = null,
+    pageCursor: Cursor? = null,
     info: PageInfo = PageInfo(),
     items: List<Item> = emptyList()
 ): DefaultResolvedPage<Item> = ResolvedPage.invoke(
     id = id,
     dataSourceId = dataSourceId,
+    pageCursor = pageCursor,
     info = info,
     items = items
 )
@@ -63,6 +67,7 @@ public inline fun <Item> PageLoadResult.Companion.page(
 public inline fun <Data : Any, Filters : Any, Item> PageLoadResult.Companion.page(
     id: String,
     dataSourceId: String? = null,
+    pageCursor: Cursor? = null,
     info: PageInfo = PageInfo(),
     items: List<Item> = emptyList(),
     original: PageRequest<Data, Filters>,
@@ -70,6 +75,7 @@ public inline fun <Data : Any, Filters : Any, Item> PageLoadResult.Companion.pag
 ): DefaultResolvedPageWithRequestData<Data, Filters, Item> = ResolvedPage.invoke(
     id = id,
     dataSourceId = dataSourceId,
+    pageCursor = pageCursor,
     info = info,
     items = items,
     original = original,
@@ -82,9 +88,9 @@ public inline fun <Data : Any, Filters : Any, Item> PageLoadResult.Companion.pag
 @ExperimentalPaginationAPI
 public inline fun <Item> PageLoadResult.Companion.pageCollection(
     id: String,
-    pages: List<ResolvedPage<Item>>,
+    pageCursor: Cursor,
+    pages: List<ResolvedPage<Item>> = emptyList(),
     dataSourceId: String? = null,
-    pageCursor: PageCursor
 ): DefaultPageCollection<Item> = PageCollection.invoke(
     id = id,
     pages = pages,
@@ -98,7 +104,7 @@ public inline fun <Item> PageLoadResult.Companion.pageCollection(
 @ExperimentalPaginationAPI
 public inline fun <Item> PageLoadResult.Companion.pagePlaceholder(
     id: String,
-    pageCursor: PageCursor,
+    pageCursor: Cursor? = null,
     noinline getter: suspend () -> ResolvedPage<Item>
 ): DefaultPagePlaceholder<Item> = PagePlaceholder.invoke(
     id = id,

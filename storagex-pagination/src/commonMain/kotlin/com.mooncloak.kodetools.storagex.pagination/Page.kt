@@ -22,6 +22,15 @@ public sealed interface Page<Item> : PageLoadResult<Item> {
     public val dataSourceId: String?
 
     /**
+     * A [Cursor] which is an opaque [String] value from the caller's
+     * perspective. From the implementor's perspective, this is a serialized object value
+     * containing data necessary for the (re-)loading of the page data. This value could be a
+     * serialized form of a [Cursor] and [Direction], or contain more complex data, it is up to the
+     * implementation to decide what data to store.
+     */
+    public val pageCursor: Cursor?
+
+    /**
      * Retrieves the underlying [List] of data items for this page.
      */
     public suspend fun get(): List<Item>
@@ -39,6 +48,12 @@ public sealed interface Page<Item> : PageLoadResult<Item> {
  *
  * @property [id] A unique identifier value for this [ResolvedPage] instance.
  *
+ * @property [pageCursor] A [Cursor] which is an opaque [String] value from the caller's
+ * perspective. From the implementor's perspective, this is a serialized object value containing
+ * data necessary for the (re-)loading of the page data. This value could be a serialized form of a
+ * [Cursor] and [Direction], or contain more complex data, it is up to the implementation to decide
+ * what data to store.
+ *
  * @property [info] The [PageInfo] for this page of data.
  *
  * @property [items] The [List] of data items for this page.
@@ -49,6 +64,8 @@ public interface ResolvedPage<Item> : Page<Item> {
     public override val id: String
 
     public override val dataSourceId: String?
+
+    public override val pageCursor: Cursor? get() = null
 
     public val info: PageInfo
 
@@ -75,7 +92,7 @@ public interface ResolvedPage<Item> : Page<Item> {
  *
  * @property [pages] The [ResolvedPage]s in this [PageCollection].
  *
- * @property [pageCursor] A [PageCursor] which is an opaque [String] value from the caller's
+ * @property [pageCursor] A [Cursor] which is an opaque [String] value from the caller's
  * perspective. From the implementor's perspective, this is a serialized object value containing
  * data necessary for the (re-)loading of the page data. This value could be a serialized form of a
  * [Cursor] and [Direction], or contain more complex data, it is up to the implementation to decide
@@ -88,9 +105,9 @@ public interface PageCollection<Item> : Page<Item> {
 
     public override val dataSourceId: String?
 
-    public val pages: List<ResolvedPage<Item>>
+    public override val pageCursor: Cursor
 
-    public val pageCursor: PageCursor
+    public val pages: List<ResolvedPage<Item>>
 
     public override suspend fun get(): List<Item> =
         pages.flatMap { page -> page.get() }
@@ -118,7 +135,7 @@ public interface PageCollection<Item> : Page<Item> {
  * (ex: using [PageCollection]), as it provides a way to load the next page of data from the
  * appropriate data source.
  *
- * @property [pageCursor] A [PageCursor] which is an opaque [String] value from the caller's
+ * @property [pageCursor] A [Cursor] which is an opaque [String] value from the caller's
  * perspective. From the implementor's perspective, this is a serialized object value containing
  * data necessary for the (re-)loading of the page data. This value could be a serialized form of a
  * [Cursor] and [Direction], or contain more complex data, it is up to the implementation to decide
@@ -131,7 +148,7 @@ public interface PagePlaceholder<Item> : Page<Item> {
 
     public override val dataSourceId: String?
 
-    public val pageCursor: PageCursor
+    public override val pageCursor: Cursor?
 
     public suspend fun resolve(): ResolvedPage<Item>
 

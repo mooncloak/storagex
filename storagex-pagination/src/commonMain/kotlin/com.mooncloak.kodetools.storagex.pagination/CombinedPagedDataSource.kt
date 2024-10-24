@@ -6,6 +6,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.supervisorScope
 import kotlinx.serialization.StringFormat
+import kotlinx.serialization.json.Json
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
@@ -13,7 +14,7 @@ import kotlin.uuid.Uuid
 public class CombinedPagedDataSource<Data : Any, Filters : Any, Item> public constructor(
     private val sources: List<PagedDataSource<Data, Filters, Item>>,
     override val sourceId: String = "Combined:" + sources.joinToString(separator = ":") { it.sourceId },
-    private val format: StringFormat
+    private val format: StringFormat = Json.Default
 ) : PagedDataSource<Data, Filters, Item> {
 
     private val sourceById: Map<String, PagedDataSource<Data, Filters, Item>> =

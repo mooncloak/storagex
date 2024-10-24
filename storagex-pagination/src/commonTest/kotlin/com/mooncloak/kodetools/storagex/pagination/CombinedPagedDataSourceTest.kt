@@ -1,78 +1,86 @@
 package com.mooncloak.kodetools.storagex.pagination
 
+import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
+import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
+import kotlin.test.assertIs
 
 @OptIn(ExperimentalPaginationAPI::class)
 class CombinedPagedDataSourceTest {
 
     @Test
-    fun test() {
-        val dataOne = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-        val dataTwo = listOf(11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
-        val sourceOne = PagedDataSource.of<Nothing, Nothing, Int>(
-            load = { request ->
-                val decodedCursor = request.cursor?.decodeOrNull<OffsetDecodedCursor>()
-                val offset = decodedCursor?.offset?.toInt() ?: 0
-                val count = request.count.toInt()
+    fun first_page() {
+        runTest {
+            val dataOne = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+            val dataTwo = listOf(11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+            val sourceOne = PagedDataSource.of<Nothing, Nothing, Int>(
+                values = dataOne
+            )
+            val sourceTwo = PagedDataSource.of<Nothing, Nothing, Int>(
+                values = dataTwo
+            )
+            val combinedSource = CombinedPagedDataSource(
+                sources = listOf(sourceOne, sourceTwo)
+            )
+            val request = PageRequest<Nothing, Nothing>(
+                count = 5u
+            )
 
-                if (offset >= dataOne.size) {
-                    PageLoadResult.error(cause = IndexOutOfBoundsException())
-                } else {
-                    val toIndex = (offset + count).coerceAtMost(dataOne.lastIndex)
-                    val items = dataOne.subList(fromIndex = offset, toIndex = toIndex)
+            val result = combinedSource.load(request)
 
-                    PageLoadResult.page(
-                        items = items,
-                        info = PageInfo(
-                            hasPrevious = null,
-                            hasNext = null,
-                            firstCursor = null,
-                            lastCursor = null,
-                            totalCount = dataOne.size.toUInt()
-                        )
-                    )
-                }
-            }
-        )
+            assertIs<PageCollection<Int>>(result)
+            assertEquals(expected = 2, actual = result.pages.size)
+
+            val pageOne = result.pages.first()
+            val pageTwo = result.pages[1]
+
+            assertEquals(expected = 5, actual = pageOne.items.size)
+            assertEquals(expected = 5, actual = pageTwo.items.size)
+            assertContentEquals(expected = listOf(1, 2, 3, 4, 5), actual = pageOne.items)
+            assertContentEquals(expected = listOf(11, 12, 13, 14, 15), actual = pageTwo.items)
+        }
     }
 
-    private fun <Data : Any, Filters : Any, Item> dataSource(
-        allItems: List<Item>
-    ): PagedDataSource<Data, Filters, Item> = PagedDataSource.of(
-        load = { request ->
-            val decodedCursor = request.cursor?.decodeOrNull<OffsetDecodedCursor>()
-            val offset = decodedCursor?.offset?.toInt() ?: 0
-            val count = request.count.toInt()
+    @Test
+    fun second_page() {
+        runTest {
+            val dataOne = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+            val dataTwo = listOf(11, 12, 13, 14, 15, 16, 17, 18, 19, 20)
+            val sourceOne = PagedDataSource.of<Nothing, Nothing, Int>(
+                values = dataOne
+            )
+            val sourceTwo = PagedDataSource.of<Nothing, Nothing, Int>(
+                values = dataTwo
+            )
+            val combinedSource = CombinedPagedDataSource(
+                sources = listOf(sourceOne, sourceTwo)
+            )
+            val initialRequest = PageRequest<Nothing, Nothing>(
+                count = 5u
+            )
 
-            if (offset >= allItems.size) {
-                PageLoadResult.error(cause = IndexOutOfBoundsException())
-            } else {
-                val toIndex = (offset + count).coerceAtMost(allItems.size)
-                val items = allItems.subList(fromIndex = offset, toIndex = toIndex)
-                val firstCursor = Cursor.encode(
-                    OffsetDecodedCursor(
-                        offset = offset.toUInt(),
-                        count = count.toUInt()
-                    )
-                )
-                val lastCursor = Cursor.encode(
-                    OffsetDecodedCursor(
-                        offset = (offset + count).toUInt(),
-                        count = count.toUInt()
-                    )
-                )
+            val initialResult = combinedSource.load(initialRequest)
 
-                PageLoadResult.page(
-                    items = items,
-                    info = PageInfo(
-                        hasPrevious = offset > 0,
-                        hasNext = offset + count < allItems.size,
-                        firstCursor = firstCursor,
-                        lastCursor = lastCursor,
-                        totalCount = allItems.size.toUInt()
-                    )
-                )
-            }
+            assertIs<PageCollection<Int>>(initialResult)
+            assertEquals(expected = 2, actual = initialResult.pages.size)
+
+            val request = PageRequest<Nothing, Nothing>(
+                cursor = initialResult.pageCursor
+            )
+
+            val result = combinedSource.load(request)
+
+            assertIs<PageCollection<Int>>(result)
+            assertEquals(expected = 2, actual = result.pages.size)
+
+            val pageOne = result.pages.first()
+            val pageTwo = result.pages[1]
+
+            assertEquals(expected = 5, actual = pageOne.items.size)
+            assertEquals(expected = 5, actual = pageTwo.items.size)
+            assertContentEquals(expected = listOf(6, 7, 8, 9, 10), actual = pageOne.items)
+            assertContentEquals(expected = listOf(16, 17, 18, 19, 20), actual = pageTwo.items)
         }
-    )
+    }
 }

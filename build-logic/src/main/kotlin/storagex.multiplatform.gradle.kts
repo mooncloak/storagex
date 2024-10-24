@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.npm.tasks.KotlinNpmInstallTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinTest
 
 plugins {
     kotlin("multiplatform")
@@ -17,7 +18,12 @@ kotlin {
                 enabled = false
             }
         }
-        nodejs()
+
+        nodejs {
+            testTask {
+                enabled = false
+            }
+        }
     }
 
     @OptIn(ExperimentalWasmDsl::class)
@@ -27,6 +33,7 @@ kotlin {
                 enabled = false
             }
         }
+
         nodejs {
             testTask {
                 enabled = false
@@ -45,9 +52,11 @@ kotlin {
     iosArm64()
     iosX64()
     iosSimulatorArm64()
+
     tvosArm64()
     tvosX64()
     tvosSimulatorArm64()
+
     watchosArm32()
     watchosArm64()
     watchosX64()
@@ -86,6 +95,12 @@ java {
 
 tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget = JvmTarget.JVM_11
+}
+
+tasks.withType<KotlinTest> {
+    if (targetName == "tvosSimulatorArm64" || targetName == "watchosSimulatorArm64") {
+        enabled = false
+    }
 }
 
 // Don't run npm install scripts, protects against

@@ -36,4 +36,3 @@ rootProject.name = "storagex"
 
 include(":storagex-keyvalue")
 include(":storagex-keyvalue-redis")
-include(":storagex-pagination")

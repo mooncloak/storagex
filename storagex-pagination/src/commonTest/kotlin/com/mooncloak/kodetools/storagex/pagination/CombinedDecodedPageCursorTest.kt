@@ -1,6 +1,5 @@
 package com.mooncloak.kodetools.storagex.pagination
 
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,8 +10,7 @@ class CombinedDecodedPageCursorTest {
     @Test
     fun encoding_and_decoding_with_string_format_works() {
         val format = Json.Default
-        val original = CombinedDecodedPageCursor<String, String>(
-            request = PageRequest(),
+        val original = CombinedDecodedPageCursor(
             references = listOf(
                 PageReference(
                     id = "123",
@@ -34,10 +32,8 @@ class CombinedDecodedPageCursorTest {
             value = original,
             format = format
         )
-        val decoded = encoded.decodeCombined(
-            format = format,
-            dataSerializer = String.serializer(),
-            filtersSerializer = String.serializer()
+        val decoded = encoded.decode<CombinedDecodedPageCursor>(
+            format = format
         )
 
         assertEquals(expected = original, actual = decoded)
@@ -46,8 +42,7 @@ class CombinedDecodedPageCursorTest {
     @Test
     fun encoding_with_extension_function_and_decoding_with_string_format_works() {
         val format = Json.Default
-        val expected = CombinedDecodedPageCursor<String, String>(
-            request = PageRequest(),
+        val expected = CombinedDecodedPageCursor(
             references = listOf(
                 PageReference(
                     id = "123",
@@ -66,7 +61,6 @@ class CombinedDecodedPageCursorTest {
             )
         )
         val encoded = Cursor.encode(
-            request = PageRequest(),
             pages = listOf(
                 ResolvedPage<String>(
                     id = "123",
@@ -83,14 +77,10 @@ class CombinedDecodedPageCursorTest {
                     )
                 )
             ),
-            format = format,
-            dataSerializer = String.serializer(),
-            filtersSerializer = String.serializer()
+            format = format
         )
-        val decoded = encoded.decodeCombined(
-            format = format,
-            dataSerializer = String.serializer(),
-            filtersSerializer = String.serializer()
+        val decoded = encoded.decode<CombinedDecodedPageCursor>(
+            format = format
         )
 
         assertEquals(expected = expected, actual = decoded)

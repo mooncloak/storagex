@@ -3,10 +3,8 @@ package com.mooncloak.kodetools.storagex.pagination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.StringFormat
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.serializer
 
 /**
  * A stateful abstraction over one or more [PagedDataSource] components that can be used for
@@ -91,16 +89,12 @@ public fun <Data : Any, Filters : Any, Item> Pager.Loader.Companion.create(
 public inline fun <reified Data : Any, reified Filters : Any, Item> Pager.Loader.Companion.create(
     vararg sources: PagedDataSource<Data, Filters, Item>,
     format: StringFormat = Json.Default,
-    dataSerializer: KSerializer<Data> = format.serializersModule.serializer(),
-    filtersSerializer: KSerializer<Filters> = format.serializersModule.serializer()
 ): Pager.Loader<Data, Filters, Item> = when {
     sources.isEmpty() -> error("At least one `PagedDataSource` MUST be provided to the `Pager.Loader.create` function.")
     sources.size == 1 -> DefaultPagerLoader(source = sources.first())
     else -> DefaultPagerLoader(
         source = CombinedPagedDataSource(
             sources = sources.toList(),
-            dataSerializer = dataSerializer,
-            filtersSerializer = filtersSerializer,
             format = format
         )
     )
@@ -114,16 +108,12 @@ public inline fun <reified Data : Any, reified Filters : Any, Item> Pager.Loader
 public inline fun <reified Data : Any, reified Filters : Any, Item> Pager.Loader.Companion.create(
     sources: Collection<PagedDataSource<Data, Filters, Item>>,
     format: StringFormat = Json.Default,
-    dataSerializer: KSerializer<Data> = format.serializersModule.serializer(),
-    filtersSerializer: KSerializer<Filters> = format.serializersModule.serializer()
 ): Pager.Loader<Data, Filters, Item> = when {
     sources.isEmpty() -> error("At least one `PagedDataSource` MUST be provided to the `Pager.Loader.create` function.")
     sources.size == 1 -> DefaultPagerLoader(source = sources.first())
     else -> DefaultPagerLoader(
         source = CombinedPagedDataSource(
             sources = sources.toList(),
-            dataSerializer = dataSerializer,
-            filtersSerializer = filtersSerializer,
             format = format
         )
     )

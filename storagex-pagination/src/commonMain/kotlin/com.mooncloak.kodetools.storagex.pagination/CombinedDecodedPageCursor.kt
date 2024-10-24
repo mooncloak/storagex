@@ -1,8 +1,6 @@
 package com.mooncloak.kodetools.storagex.pagination
 
 import kotlinx.serialization.BinaryFormat
-import kotlinx.serialization.DeserializationStrategy
-import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -13,8 +11,7 @@ import kotlinx.serialization.serializer
 
 @ExperimentalPaginationAPI
 @Serializable
-public data class CombinedDecodedPageCursor<Data : Any, Filters : Any> public constructor(
-    @SerialName(value = "request") public val request: PageRequest<Data, Filters>,
+public data class CombinedDecodedPageCursor public constructor(
     @SerialName(value = "references") public val references: List<PageReference> = emptyList()
 )
 
@@ -30,8 +27,6 @@ public data class PageReference public constructor(
  * Encodes the provided values as a [CombinedDecodedPageCursor] model in its encoded form, using
  * the provided [format].
  *
- * @param [request] The [PageRequest] made to the underlying [PagedDataSource]s.
- *
  * @param [pages] The [ResolvedPage]s returned by the [PagedDataSource]s.
  *
  * @param [format] The [StringFormat] used to encode the constructed [CombinedDecodedPageCursor]
@@ -48,14 +43,12 @@ public data class PageReference public constructor(
  * @see [CombinedPagedDataSource]
  */
 @ExperimentalPaginationAPI
-public inline fun <reified Data : Any, reified Filters : Any, Item> Cursor.Companion.encode(
-    request: PageRequest<Data, Filters>,
+public inline fun <Item> Cursor.Companion.encode(
     pages: List<ResolvedPage<Item>>,
     format: StringFormat = Json.Default,
-    serializer: SerializationStrategy<CombinedDecodedPageCursor<Data, Filters>> = format.serializersModule.serializer()
+    serializer: SerializationStrategy<CombinedDecodedPageCursor> = format.serializersModule.serializer()
 ): Cursor {
     val decoded = CombinedDecodedPageCursor(
-        request = request,
         references = pages.map { page ->
             PageReference(
                 id = page.id,
@@ -76,8 +69,6 @@ public inline fun <reified Data : Any, reified Filters : Any, Item> Cursor.Compa
  * Encodes the provided values as a [CombinedDecodedPageCursor] model in its encoded form, using
  * the provided [format].
  *
- * @param [request] The [PageRequest] made to the underlying [PagedDataSource]s.
- *
  * @param [pages] The [ResolvedPage]s returned by the [PagedDataSource]s.
  *
  * @param [format] The [BinaryFormat] used to encode the constructed [CombinedDecodedPageCursor]
@@ -94,14 +85,12 @@ public inline fun <reified Data : Any, reified Filters : Any, Item> Cursor.Compa
  * @see [CombinedPagedDataSource]
  */
 @ExperimentalPaginationAPI
-public inline fun <reified Data : Any, reified Filters : Any, Item> Cursor.Companion.encode(
-    request: PageRequest<Data, Filters>,
+public inline fun <Item> Cursor.Companion.encode(
     pages: List<ResolvedPage<Item>>,
     format: BinaryFormat,
-    serializer: SerializationStrategy<CombinedDecodedPageCursor<Data, Filters>> = format.serializersModule.serializer()
+    serializer: SerializationStrategy<CombinedDecodedPageCursor> = format.serializersModule.serializer()
 ): Cursor {
     val decoded = CombinedDecodedPageCursor(
-        request = request,
         references = pages.map { page ->
             PageReference(
                 id = page.id,
@@ -117,135 +106,3 @@ public inline fun <reified Data : Any, reified Filters : Any, Item> Cursor.Compa
         serializer = serializer
     )
 }
-
-/**
- * Encodes the provided values as a [CombinedDecodedPageCursor] model in its encoded form, using
- * the provided [format].
- *
- * @param [request] The [PageRequest] made to the underlying [PagedDataSource]s.
- *
- * @param [pages] The [ResolvedPage]s returned by the [PagedDataSource]s.
- *
- * @param [format] The [StringFormat] used to encode the constructed [CombinedDecodedPageCursor]
- * model into a [Cursor] instance.
- *
- * @throws [SerializationException] in case of any encoding-specific error.
- *
- * @throws [IllegalArgumentException] if the encoded input does not comply format's specification.
- *
- * @return A [Cursor] with the provided values encoded.
- *
- * @see [CombinedDecodedPageCursor]
- * @see [Cursor.Companion.encode]
- * @see [CombinedPagedDataSource]
- */
-@ExperimentalPaginationAPI
-public fun <Data : Any, Filters : Any, Item> Cursor.Companion.encode(
-    request: PageRequest<Data, Filters>,
-    pages: List<ResolvedPage<Item>>,
-    format: StringFormat = Json.Default,
-    dataSerializer: KSerializer<Data>,
-    filtersSerializer: KSerializer<Filters>
-): Cursor {
-    val decoded = CombinedDecodedPageCursor(
-        request = request,
-        references = pages.map { page ->
-            PageReference(
-                id = page.id,
-                info = page.info,
-                dataSourceId = page.dataSourceId
-            )
-        }
-    )
-
-    return Cursor.encode(
-        value = decoded,
-        format = format,
-        serializer = CombinedDecodedPageCursor.serializer(dataSerializer, filtersSerializer)
-    )
-}
-
-/**
- * Encodes the provided values as a [CombinedDecodedPageCursor] model in its encoded form, using
- * the provided [format].
- *
- * @param [request] The [PageRequest] made to the underlying [PagedDataSource]s.
- *
- * @param [pages] The [ResolvedPage]s returned by the [PagedDataSource]s.
- *
- * @param [format] The [BinaryFormat] used to encode the constructed [CombinedDecodedPageCursor]
- * model into a [Cursor] instance.
- *
- * @throws [SerializationException] in case of any encoding-specific error.
- *
- * @throws [IllegalArgumentException] if the encoded input does not comply format's specification.
- *
- * @return A [Cursor] with the provided values encoded.
- *
- * @see [CombinedDecodedPageCursor]
- * @see [Cursor.Companion.encode]
- * @see [CombinedPagedDataSource]
- */
-@ExperimentalPaginationAPI
-public fun <Data : Any, Filters : Any, Item> Cursor.Companion.encode(
-    request: PageRequest<Data, Filters>,
-    pages: List<ResolvedPage<Item>>,
-    format: BinaryFormat,
-    dataSerializer: KSerializer<Data>,
-    filtersSerializer: KSerializer<Filters>
-): Cursor {
-    val decoded = CombinedDecodedPageCursor(
-        request = request,
-        references = pages.map { page ->
-            PageReference(
-                id = page.id,
-                info = page.info,
-                dataSourceId = page.dataSourceId
-            )
-        }
-    )
-
-    return Cursor.encode(
-        value = decoded,
-        format = format,
-        serializer = CombinedDecodedPageCursor.serializer(dataSerializer, filtersSerializer)
-    )
-}
-
-@ExperimentalPaginationAPI
-public inline fun <reified Data : Any, reified Filters : Any> Cursor.decodeCombined(
-    format: StringFormat = Json.Default,
-    deserializer: DeserializationStrategy<CombinedDecodedPageCursor<Data, Filters>> = format.serializersModule.serializer()
-): CombinedDecodedPageCursor<Data, Filters> = this.decode(
-    format = format,
-    deserializer = deserializer
-)
-
-@ExperimentalPaginationAPI
-public fun <Data : Any, Filters : Any> Cursor.decodeCombined(
-    format: StringFormat = Json.Default,
-    dataSerializer: KSerializer<Data>,
-    filtersSerializer: KSerializer<Filters>
-): CombinedDecodedPageCursor<Data, Filters> = this.decode(
-    format = format,
-    deserializer = CombinedDecodedPageCursor.serializer(dataSerializer, filtersSerializer)
-)
-
-@ExperimentalPaginationAPI
-public inline fun <reified Data : Any, reified Filters : Any> Cursor.decodeCombinedOrNull(
-    format: StringFormat = Json.Default,
-    deserializer: DeserializationStrategy<CombinedDecodedPageCursor<Data, Filters>> = format.serializersModule.serializer()
-): CombinedDecodedPageCursor<Data, Filters>? = this.decodeOrNull(
-    format = format,
-    deserializer = deserializer
-)
-
-@ExperimentalPaginationAPI
-public fun <Data : Any, Filters : Any> Cursor.decodeCombinedOrNull(
-    format: StringFormat = Json.Default,
-    dataSerializer: KSerializer<Data>,
-    filtersSerializer: KSerializer<Filters>
-): CombinedDecodedPageCursor<Data, Filters>? = this.decodeOrNull(
-    format = format,
-    deserializer = CombinedDecodedPageCursor.serializer(dataSerializer, filtersSerializer)
-)

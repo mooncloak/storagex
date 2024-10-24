@@ -1,5 +1,7 @@
 package com.mooncloak.kodetools.storagex.pagination
 
+import kotlinx.serialization.Serializable
+
 /**
  * Represents a generic page of data. A [Page] can be a resolved page of data which contains the
  * actual page data (via [ResolvedPage]), a collection of resolved pages (via [PageCollection]), or
@@ -59,6 +61,7 @@ public sealed interface Page<Item> : PageLoadResult<Item> {
  * @property [items] The [List] of data items for this page.
  */
 @ExperimentalPaginationAPI
+@Serializable(with = ResolvedPageSerializer::class)
 public interface ResolvedPage<Item> : Page<Item> {
 
     public override val id: String
@@ -99,6 +102,7 @@ public interface ResolvedPage<Item> : Page<Item> {
  * what data to store.
  */
 @ExperimentalPaginationAPI
+@Serializable(with = PageCollectionSerializer::class)
 public interface PageCollection<Item> : Page<Item> {
 
     public override val id: String

@@ -5,6 +5,25 @@ import kotlinx.serialization.json.Json
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+/**
+ * Creates an [InMemoryIndexBasedPagedDataSource] with the provided [values].
+ *
+ * @param [values] The [Collection] of values.
+ *
+ * @param [sourceId] The identifier of the returned [InMemoryIndexBasedPagedDataSource].
+ *
+ * @param [format] The [StringFormat] used for decoding and encoding the [Cursor] values.
+ *
+ * @param [filter] An optional filter function that is invoked while loading each page.
+ *
+ * @return [InMemoryIndexBasedPagedDataSource]
+ *
+ * ## Example Usage:
+ *
+ * ```
+ * val source = PagedDataSource.of<Query, Filters, Item>(values = myValuesList)
+ * ```
+ */
 @ExperimentalPaginationAPI
 @OptIn(ExperimentalUuidApi::class)
 public inline fun <Data : Any, Filters : Any, Item> PagedDataSource.Companion.of(
@@ -19,6 +38,11 @@ public inline fun <Data : Any, Filters : Any, Item> PagedDataSource.Companion.of
     filter = filter
 )
 
+/**
+ * A [PagedDataSource] that keeps the provided [values] in-memory (not stored to disk). Invoking
+ * the [InMemoryIndexBasedPagedDataSource.load] function, loads the pages from the [values]
+ * in-memory.
+ */
 @ExperimentalPaginationAPI
 public class InMemoryIndexBasedPagedDataSource<Data : Any, Filters : Any, Item> public constructor(
     override val sourceId: String,

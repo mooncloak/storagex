@@ -369,4 +369,22 @@ class InMemoryIndexBasedPagedDataSourceTest {
             assertEquals(expected = expectedInfo, actual = result.info)
         }
     }
+
+    @Test
+    fun only_filtered_values_are_returned() {
+        runTest {
+            val values = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+            val source = PagedDataSource.of<Nothing, Nothing, Int>(
+                values = values,
+                filter = { _ ->
+                    this.subList(fromIndex = 0, toIndex = this.size / 2)
+                }
+            )
+            val result = source.load(request = PageRequest(count = 10u))
+            val expected = listOf(1, 2, 3, 4, 5)
+
+            assertIs<ResolvedPage<Int>>(result)
+            assertEquals(expected = expected, actual = result.items)
+        }
+    }
 }

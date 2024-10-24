@@ -55,7 +55,8 @@ public inline fun Cursor.Companion.encode(
 
     return Cursor.encode(
         value = decoded,
-        format = format
+        format = format,
+        serializer = OffsetDecodedCursor.serializer()
     )
 }
 
@@ -93,6 +94,7 @@ public inline fun Cursor.Companion.encode(
 
     return Cursor.encode(
         value = decoded,
-        format = format
+        format = format,
+        serializer = OffsetDecodedCursor.serializer()
     )
 }

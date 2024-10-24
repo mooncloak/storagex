@@ -1,14 +1,13 @@
 package com.mooncloak.kodetools.storagex.pagination
 
 import kotlinx.serialization.BinaryFormat
+import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
+import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
-import kotlinx.serialization.decodeFromByteArray
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToByteArray
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.jvm.JvmInline
@@ -52,9 +51,10 @@ public value class Cursor public constructor(
 @Throws(SerializationException::class, IllegalArgumentException::class)
 public inline fun <reified DecodedCursor> Cursor.Companion.encode(
     value: DecodedCursor,
-    format: StringFormat = Json.Default
+    format: StringFormat = Json.Default,
+    serializer: SerializationStrategy<DecodedCursor> = format.serializersModule.serializer()
 ): Cursor {
-    val formatString = format.encodeToString(value = value)
+    val formatString = format.encodeToString(value = value, serializer = serializer)
     val base64EncodedString = Base64.UrlSafe.encode(formatString.encodeToByteArray())
 
     return Cursor(value = base64EncodedString)
@@ -78,11 +78,14 @@ public inline fun <reified DecodedCursor> Cursor.Companion.encode(
 @ExperimentalPaginationAPI
 @OptIn(ExperimentalEncodingApi::class)
 @Throws(SerializationException::class, IllegalArgumentException::class)
-public inline fun <reified DecodedCursor> Cursor.decode(format: StringFormat = Json.Default): DecodedCursor {
+public inline fun <reified DecodedCursor> Cursor.decode(
+    format: StringFormat = Json.Default,
+    deserializer: DeserializationStrategy<DecodedCursor> = format.serializersModule.serializer()
+): DecodedCursor {
     val bytes = Base64.UrlSafe.decode(this.value)
     val formatString = bytes.decodeToString()
 
-    return format.decodeFromString(string = formatString)
+    return format.decodeFromString(string = formatString, deserializer = deserializer)
 }
 
 /**
@@ -101,12 +104,17 @@ public inline fun <reified DecodedCursor> Cursor.decode(format: StringFormat = J
  * @see [Cursor]
  */
 @ExperimentalPaginationAPI
-public inline fun <reified DecodedCursor> Cursor.decodeOrNull(format: StringFormat = Json.Default): DecodedCursor? =
-    try {
-        this.decode(format = format)
-    } catch (_: Exception) {
-        null
-    }
+public inline fun <reified DecodedCursor> Cursor.decodeOrNull(
+    format: StringFormat = Json.Default,
+    deserializer: DeserializationStrategy<DecodedCursor> = format.serializersModule.serializer()
+): DecodedCursor? = try {
+    this.decode(
+        format = format,
+        deserializer = deserializer
+    )
+} catch (_: Exception) {
+    null
+}
 
 /**
  * Encodes the provided [value] into a [Cursor] using the provided Binary [format] and Base64 URL
@@ -129,9 +137,10 @@ public inline fun <reified DecodedCursor> Cursor.decodeOrNull(format: StringForm
 @Throws(SerializationException::class, IllegalArgumentException::class)
 public inline fun <reified DecodedCursor> Cursor.Companion.encode(
     value: DecodedCursor,
-    format: BinaryFormat
+    format: BinaryFormat,
+    serializer: SerializationStrategy<DecodedCursor> = format.serializersModule.serializer()
 ): Cursor {
-    val encodedBytes = format.encodeToByteArray(value = value)
+    val encodedBytes = format.encodeToByteArray(value = value, serializer = serializer)
     val base64EncodedString = Base64.UrlSafe.encode(encodedBytes)
 
     return Cursor(value = base64EncodedString)
@@ -155,10 +164,13 @@ public inline fun <reified DecodedCursor> Cursor.Companion.encode(
 @ExperimentalPaginationAPI
 @OptIn(ExperimentalEncodingApi::class)
 @Throws(SerializationException::class, IllegalArgumentException::class)
-public inline fun <reified DecodedCursor> Cursor.decode(format: BinaryFormat): DecodedCursor {
+public inline fun <reified DecodedCursor> Cursor.decode(
+    format: BinaryFormat,
+    deserializer: DeserializationStrategy<DecodedCursor> = format.serializersModule.serializer()
+): DecodedCursor {
     val bytes = Base64.UrlSafe.decode(this.value)
 
-    return format.decodeFromByteArray(bytes = bytes)
+    return format.decodeFromByteArray(bytes = bytes, deserializer = deserializer)
 }
 
 /**
@@ -177,9 +189,14 @@ public inline fun <reified DecodedCursor> Cursor.decode(format: BinaryFormat): D
  * @see [Cursor]
  */
 @ExperimentalPaginationAPI
-public inline fun <reified DecodedCursor> Cursor.decodeOrNull(format: BinaryFormat): DecodedCursor? =
-    try {
-        this.decode(format = format)
-    } catch (_: Exception) {
-        null
-    }
+public inline fun <reified DecodedCursor> Cursor.decodeOrNull(
+    format: BinaryFormat,
+    deserializer: DeserializationStrategy<DecodedCursor> = format.serializersModule.serializer()
+): DecodedCursor? = try {
+    this.decode(
+        format = format,
+        deserializer = deserializer
+    )
+} catch (_: Exception) {
+    null
+}

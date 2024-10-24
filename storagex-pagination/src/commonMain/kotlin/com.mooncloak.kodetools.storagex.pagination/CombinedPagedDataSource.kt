@@ -3,13 +3,18 @@ package com.mooncloak.kodetools.storagex.pagination
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.supervisorScope
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.StringFormat
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 @ExperimentalPaginationAPI
 public class CombinedPagedDataSource<Data : Any, Filters : Any, Item> public constructor(
     private val sources: List<PagedDataSource<Data, Filters, Item>>,
-    override val sourceId: String = "Combined:" + sources.joinToString(separator = ":") { it.sourceId }
+    override val sourceId: String = "Combined:" + sources.joinToString(separator = ":") { it.sourceId },
+    private val format: StringFormat,
+    private val dataSerializer: KSerializer<Data>,
+    private val filtersSerializer: KSerializer<Filters>
 ) : PagedDataSource<Data, Filters, Item> {
 
     private val sourceById: Map<String, PagedDataSource<Data, Filters, Item>> =
@@ -20,7 +25,11 @@ public class CombinedPagedDataSource<Data : Any, Filters : Any, Item> public con
         supervisorScope {
             try {
                 val pageCursor = runCatching {
-                    request.cursor?.decode<CombinedDecodedPageCursor<Data, Filters>>()
+                    request.cursor?.decodeCombinedOrNull(
+                        format = format,
+                        dataSerializer = dataSerializer,
+                        filtersSerializer = filtersSerializer
+                    )
                 }.getOrNull()
 
                 if (pageCursor != null) {
@@ -53,7 +62,10 @@ public class CombinedPagedDataSource<Data : Any, Filters : Any, Item> public con
                         pages = pages,
                         pageCursor = Cursor.encode(
                             request = request,
-                            pages = pages
+                            pages = pages,
+                            dataSerializer = dataSerializer,
+                            filtersSerializer = filtersSerializer,
+                            format = format
                         )
                     )
                 } else {
@@ -77,7 +89,10 @@ public class CombinedPagedDataSource<Data : Any, Filters : Any, Item> public con
                         pages = pages,
                         pageCursor = Cursor.encode(
                             request = request,
-                            pages = pages
+                            pages = pages,
+                            dataSerializer = dataSerializer,
+                            filtersSerializer = filtersSerializer,
+                            format = format
                         )
                     )
                 }

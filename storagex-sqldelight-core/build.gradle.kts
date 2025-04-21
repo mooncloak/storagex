@@ -95,7 +95,7 @@ kotlin {
 
 android {
     compileSdk = LibraryConstants.Android.compileSdkVersion
-    namespace = "com.mooncloak.kodetools.storagex.sqldelight.adapters"
+    namespace = "com.mooncloak.kodetools.storagex.sqldelight.core"
 
     defaultConfig {
         minSdk = LibraryConstants.Android.minSdkVersion

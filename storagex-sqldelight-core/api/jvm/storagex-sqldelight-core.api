@@ -1,0 +1,151 @@
+public abstract interface class com/mooncloak/kodetools/storagex/sqldelight/core/DatabaseManager : com/mooncloak/kodetools/storagex/sqldelight/core/DatabaseProvider, java/lang/AutoCloseable {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/sqldelight/core/DatabaseManager$Companion;
+	public abstract fun close ()V
+	public abstract fun get ()Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/DatabaseManager$Companion {
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/sqldelight/core/DatabaseProvider {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/sqldelight/core/DatabaseProvider$Companion;
+	public abstract fun get ()Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/DatabaseProvider$Companion {
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/sqldelight/core/SqlDriverFactory {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/sqldelight/core/SqlDriverFactory$Companion;
+	public abstract fun create ()Lapp/cash/sqldelight/db/SqlDriver;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/SqlDriverFactory$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/BooleanAsIntDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/BooleanAsIntDatabaseAdapter;
+	public fun decode (I)Ljava/lang/Boolean;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Z)Ljava/lang/Integer;
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter : app/cash/sqldelight/ColumnAdapter {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapterKt {
+	public static final fun booleanAsInt (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lapp/cash/sqldelight/ColumnAdapter;
+	public static final fun durationAsIsoString (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun durationAsMillisecondsLong (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun floatAsDouble (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lapp/cash/sqldelight/ColumnAdapter;
+	public static final fun instantAsIsoString (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun instantAsMillisecondsLong (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun intAsLong (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lapp/cash/sqldelight/ColumnAdapter;
+	public static final fun jsonElementAsString (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;Lkotlinx/serialization/json/Json;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static synthetic fun jsonElementAsString$default (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;Lkotlinx/serialization/json/Json;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun jsonObjectAsString (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;Lkotlinx/serialization/json/Json;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static synthetic fun jsonObjectAsString$default (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;Lkotlinx/serialization/json/Json;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun shortAsLong (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lapp/cash/sqldelight/ColumnAdapter;
+	public static final fun uuidAsByteArray (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun uuidAsHexString (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+	public static final fun uuidAsString (Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter$Companion;)Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DurationAsIsoStringDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DurationAsIsoStringDatabaseAdapter;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode-5sfh64U (Ljava/lang/String;)J
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode-LRDsOJo (J)Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DurationAsMillisecondsLongDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/DurationAsMillisecondsLongDatabaseAdapter;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode-5sfh64U (J)J
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode-LRDsOJo (J)Ljava/lang/Long;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/InstantAsIsoStringDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/InstantAsIsoStringDatabaseAdapter;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode (Ljava/lang/String;)Lkotlinx/datetime/Instant;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Lkotlinx/datetime/Instant;)Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/InstantAsMillisecondsLongDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/InstantAsMillisecondsLongDatabaseAdapter;
+	public fun decode (J)Lkotlinx/datetime/Instant;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Lkotlinx/datetime/Instant;)Ljava/lang/Long;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/JsonElementDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public fun <init> ()V
+	public fun <init> (Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode (Ljava/lang/String;)Lkotlinx/serialization/json/JsonElement;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Lkotlinx/serialization/json/JsonElement;)Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/JsonObjectDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public fun <init> ()V
+	public fun <init> (Lkotlinx/serialization/json/Json;)V
+	public synthetic fun <init> (Lkotlinx/serialization/json/Json;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode (Ljava/lang/String;)Lkotlinx/serialization/json/JsonObject;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Lkotlinx/serialization/json/JsonObject;)Ljava/lang/String;
+}
+
+public class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/SerializableValueAsByteArrayDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public fun <init> (Lkotlinx/serialization/BinaryFormat;Lkotlinx/serialization/KSerializer;)V
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun decode ([B)Ljava/lang/Object;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun encode (Ljava/lang/Object;)[B
+}
+
+public class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/SerializableValueAsStringDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public fun <init> (Lkotlinx/serialization/StringFormat;Lkotlinx/serialization/KSerializer;)V
+	public synthetic fun <init> (Lkotlinx/serialization/StringFormat;Lkotlinx/serialization/KSerializer;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun decode (Ljava/lang/String;)Ljava/lang/Object;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public final fun encode (Ljava/lang/Object;)Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/UuidAsByteArrayDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/UuidAsByteArrayDatabaseAdapter;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode ([B)Lkotlin/uuid/Uuid;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Lkotlin/uuid/Uuid;)[B
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/UuidAsHexStringDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/UuidAsHexStringDatabaseAdapter;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode (Ljava/lang/String;)Lkotlin/uuid/Uuid;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Lkotlin/uuid/Uuid;)Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/storagex/sqldelight/core/adapters/UuidAsStringDatabaseAdapter : com/mooncloak/kodetools/storagex/sqldelight/core/adapters/DatabaseAdapter {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/sqldelight/core/adapters/UuidAsStringDatabaseAdapter;
+	public synthetic fun decode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun decode (Ljava/lang/String;)Lkotlin/uuid/Uuid;
+	public synthetic fun encode (Ljava/lang/Object;)Ljava/lang/Object;
+	public fun encode (Lkotlin/uuid/Uuid;)Ljava/lang/String;
+}
+

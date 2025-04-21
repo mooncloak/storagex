@@ -1,6 +1,6 @@
 plugins {
     `maven-publish`
-    signing
+    // TODO: Re-enable: signing
 }
 
 version = rootProject.version
@@ -87,6 +87,12 @@ fun MavenPublication.mavenCentralPom() {
 
         developers {
             developer {
+                id.set("mooncloak")
+                name.set("mooncloak Team")
+                url.set("https://github.com/mooncloak")
+            }
+
+            developer {
                 id.set("ckeenan")
                 name.set("Chris Keenan")
                 url.set("https://github.com/chRyNaN")
@@ -102,6 +108,7 @@ fun MavenPublication.mavenCentralPom() {
     }
 }
 
+/* FIXME: Signing
 signing {
     setRequired {
         findProperty("signing.keyId") != null
@@ -116,3 +123,4 @@ signing {
 project.tasks.withType(AbstractPublishToMaven::class.java).configureEach {
     dependsOn(project.tasks.withType(Sign::class.java))
 }
+*/

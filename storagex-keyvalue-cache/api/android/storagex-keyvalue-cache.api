@@ -1,0 +1,65 @@
+public final class com/mooncloak/kodetools/storagex/keyvalue/cache/AndroidCacheKt {
+	public static final fun create-51bEbmg (Lcom/mooncloak/kodetools/storagex/keyvalue/cache/Cache$Companion;Lkotlinx/serialization/StringFormat;Ljava/lang/Integer;Lkotlin/time/Duration;Lkotlinx/datetime/Clock;)Lcom/mooncloak/kodetools/storagex/keyvalue/cache/Cache;
+	public static synthetic fun create-51bEbmg$default (Lcom/mooncloak/kodetools/storagex/keyvalue/cache/Cache$Companion;Lkotlinx/serialization/StringFormat;Ljava/lang/Integer;Lkotlin/time/Duration;Lkotlinx/datetime/Clock;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/cache/Cache;
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/cache/Cache : com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/cache/Cache$Companion;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/cache/Cache$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/cache/Cache$DefaultImpls {
+	public static fun isEmpty (Lcom/mooncloak/kodetools/storagex/keyvalue/cache/Cache;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue$Companion;
+	public synthetic fun <init> (Lkotlinx/datetime/Instant;JLjava/lang/Object;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public final fun component1 ()Lkotlinx/datetime/Instant;
+	public final fun component2-UwyO8pc ()J
+	public final fun component3 ()Ljava/lang/Object;
+	public final fun copy-8Mi8wO0 (Lkotlinx/datetime/Instant;JLjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue;
+	public static synthetic fun copy-8Mi8wO0$default (Lcom/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue;Lkotlinx/datetime/Instant;JLjava/lang/Object;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getExpiresIn-UwyO8pc ()J
+	public final fun getTimestamp ()Lkotlinx/datetime/Instant;
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public synthetic class com/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue$$serializer : kotlinx/serialization/internal/GeneratedSerializer {
+	public fun <init> (Lkotlinx/serialization/KSerializer;)V
+	public final fun childSerializers ()[Lkotlinx/serialization/KSerializer;
+	public final fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Lcom/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue;
+	public synthetic fun deserialize (Lkotlinx/serialization/encoding/Decoder;)Ljava/lang/Object;
+	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
+	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue;)V
+	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
+	public final fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue$Companion {
+	public final fun serializer (Lkotlinx/serialization/KSerializer;)Lkotlinx/serialization/KSerializer;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/cache/CachedValueKt {
+	public static final fun isValidAt (Lcom/mooncloak/kodetools/storagex/keyvalue/cache/CachedValue;Lkotlinx/datetime/Instant;)Z
+}
+
+public class com/mooncloak/kodetools/storagex/keyvalue/cache/InMemoryCache : com/mooncloak/kodetools/storagex/keyvalue/InMemoryKeyValueStorage, com/mooncloak/kodetools/storagex/keyvalue/cache/Cache {
+	public synthetic fun <init> (Lkotlinx/serialization/StringFormat;Lkotlinx/datetime/Clock;Lkotlin/time/Duration;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun contains (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun count (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun flow (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;)Lkotlinx/coroutines/flow/Flow;
+	public fun get (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun remove (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun set (Ljava/lang/Object;Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+

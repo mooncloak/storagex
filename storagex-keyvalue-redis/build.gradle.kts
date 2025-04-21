@@ -17,7 +17,6 @@ kotlin {
             languageSettings.optIn("kotlinx.coroutines.ExperimentalCoroutinesApi")
             languageSettings.optIn("kotlinx.coroutines.FlowPreview")
             languageSettings.optIn("kotlin.time.ExperimentalTime")
-            languageSettings.optIn("com.chrynan.navigation.ExperimentalNavigationApi")
             languageSettings.optIn("-Xexpect-actual-classes")
         }
 
@@ -28,6 +27,10 @@ kotlin {
                 // Coroutines
                 // https://github.com/Kotlin/kotlinx.coroutines
                 implementation(KotlinX.coroutines.core)
+
+                // Serialization
+                // https://github.com/Kotlin/kotlinx.serialization
+                implementation(KotlinX.serialization.core)
             }
         }
 

@@ -1,0 +1,21 @@
+public class com/mooncloak/kodetools/storagex/keyvalue/settings/SettingsKeyValueStorage : com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage {
+	public fun <init> (Lcom/russhwolf/settings/Settings;Lkotlinx/serialization/modules/SerializersModule;)V
+	public synthetic fun <init> (Lcom/russhwolf/settings/Settings;Lkotlinx/serialization/modules/SerializersModule;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun contains (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun contains (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun count (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public synthetic fun flow (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;)Lkotlinx/coroutines/flow/Flow;
+	public fun flow (Ljava/lang/String;Lkotlinx/serialization/KSerializer;)Lkotlinx/coroutines/flow/Flow;
+	public synthetic fun get (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun get (Ljava/lang/String;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun isEmpty (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun remove (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun set (Ljava/lang/Object;Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun set (Ljava/lang/String;Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+}
+

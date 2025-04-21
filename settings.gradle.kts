@@ -36,3 +36,6 @@ rootProject.name = "storagex"
 
 include(":storagex-keyvalue")
 include(":storagex-keyvalue-redis")
+include(":storagex-krud")
+// TODO: include(":storagex-kwery")
+// TODO: include(":storagex-skema")

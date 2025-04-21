@@ -1,4 +1,4 @@
-package com.mooncloak.kodetools.storagex.keyvalue
+package com.mooncloak.kodetools.storagex.keyvalue.cache
 
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
@@ -28,5 +28,5 @@ public data class CachedValue<T> public constructor(
  * @return `true` if this [CachedValue] is still considered valid at the provided time [instant],
  * and therefore the data can still be used, otherwise `false`.
  */
-public fun <T> CachedValue<T>.isValidAt(instant: Instant): Boolean =
+public inline fun <T> CachedValue<T>.isValidAt(instant: Instant): Boolean =
     this.timestamp + this.expiresIn > instant

@@ -103,7 +103,7 @@ public interface MutableRepository<ID : Any, Value : Any> : Repository<ID, Value
      * @throws [CancellationException] If the coroutine is cancelled.
      */
     @Throws(IllegalArgumentException::class, CancellationException::class)
-    public suspend fun remove(id: String)
+    public suspend fun remove(id: ID)
 
     /**
      * Removes all items from the underlying storage.

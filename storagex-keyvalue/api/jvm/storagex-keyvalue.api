@@ -33,134 +33,111 @@ public final class com/mooncloak/kodetools/storagex/keyvalue/CachedValueKt {
 	public static final fun isValidAt (Lcom/mooncloak/kodetools/storagex/keyvalue/CachedValue;Lkotlinx/datetime/Instant;)Z
 }
 
-public final class com/mooncloak/kodetools/storagex/keyvalue/InMemoryKeyValueStorageKt {
-	public static final fun InMemory (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;
+public class com/mooncloak/kodetools/storagex/keyvalue/InMemoryKeyValueStorage : com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage, com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage {
+	public fun <init> (Lkotlinx/serialization/StringFormat;)V
+	public fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun contains (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun count (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun flow (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;)Lkotlinx/coroutines/flow/Flow;
+	public fun get (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun isEmpty (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun set (Ljava/lang/Object;Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
 }
 
-public final class com/mooncloak/kodetools/storagex/keyvalue/JvmLocalKeyValueStorageKt {
-	public static final fun Local (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;
+public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/KeyValueProperty {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueProperty$Companion;
+	public abstract fun flow ()Lkotlinx/coroutines/flow/Flow;
+	public abstract fun get (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public final class com/mooncloak/kodetools/storagex/keyvalue/JvmSettingsKeyValueStorageKt {
-	public static final fun Settings (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;Lcom/russhwolf/settings/Settings;Ljava/lang/String;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;
-	public static synthetic fun Settings$default (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;Lkotlinx/serialization/StringFormat;Lcom/russhwolf/settings/Settings;Ljava/lang/String;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;
+public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValueProperty$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyDelegate : kotlin/properties/ReadOnlyProperty {
+	public fun <init> (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;)V
+	public fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueProperty;
+	public synthetic fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
+}
+
+public abstract class com/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Companion;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Loaded : com/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent {
+	public fun <init> (Ljava/lang/Object;)V
+	public final fun component1 ()Ljava/lang/Object;
+	public final fun copy (Ljava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Loaded;
+	public static synthetic fun copy$default (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Loaded;Ljava/lang/Object;ILjava/lang/Object;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Loaded;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getValue ()Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Loading : com/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent {
+	public static final field INSTANCE Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValuePropertyLoadingEvent$Loading;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
 }
 
 public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage {
 	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion;
-	public abstract fun changes (Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-	public abstract fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun containsKey (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun entries (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun get (Ljava/lang/Object;Lkotlinx/serialization/DeserializationStrategy;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun getFormat ()Lkotlinx/serialization/SerialFormat;
-	public abstract fun getValue (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun contains (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun count (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun flow (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;)Lkotlinx/coroutines/flow/Flow;
+	public abstract fun get (Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun isEmpty (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun keys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun size (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun values (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Companion {
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$DefaultImpls {
-	public static fun changes (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-	public static fun close (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun containsKey (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun get (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Ljava/lang/Object;Lkotlinx/serialization/DeserializationStrategy;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static fun isEmpty (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun keys (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun values (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-}
-
-public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry$Companion;
-	public abstract fun component1 ()Ljava/lang/Object;
-	public abstract fun component2 ()Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue;
-	public abstract fun getKey ()Ljava/lang/Object;
-	public abstract fun getStoredValue ()Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue;
-}
-
-public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry$Companion {
-}
-
-public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry$DefaultImpls {
-	public static fun component1 (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry;)Ljava/lang/Object;
-	public static fun component2 (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue;
-}
-
-public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue$Companion;
-	public abstract fun getFormat ()Lkotlinx/serialization/SerialFormat;
-	public abstract fun getRawValue ()Ljava/lang/Object;
-	public abstract fun value (Lkotlinx/serialization/DeserializationStrategy;)Ljava/lang/Object;
-}
-
-public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue$Companion {
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorageKt {
-	public static final fun changesOrNull (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-	public static final fun getValueOrNull (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry$Companion;Ljava/lang/Object;Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry$Companion;Ljava/lang/Object;Ljava/lang/Object;Lkotlinx/serialization/SerialFormat;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry$Companion;Ljava/lang/Object;Ljava/lang/String;Lkotlinx/serialization/StringFormat;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$Entry;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue$Companion;Ljava/lang/Object;Lkotlinx/serialization/SerialFormat;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue$Companion;Ljava/lang/String;Lkotlinx/serialization/StringFormat;)Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage$StoredValue;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry$Companion;Ljava/lang/Object;Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry$Companion;Ljava/lang/Object;Ljava/lang/Object;Lkotlinx/serialization/SerializationStrategy;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry;
-	public static final fun invoke (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue$Companion;Ljava/lang/Object;Lkotlinx/serialization/SerializationStrategy;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue;
 	public static final fun isNotEmpty (Lcom/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun putAll (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Ljava/util/Map;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun putAll (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Lkotlin/sequences/Sequence;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun putAll (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;[Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static final fun putAll (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;[Lkotlin/Pair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueProperty : com/mooncloak/kodetools/storagex/keyvalue/KeyValueProperty {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueProperty$Companion;
+	public abstract fun remove (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun set (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueProperty$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValuePropertyKt {
+	public static final fun update (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueProperty;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage : com/mooncloak/kodetools/storagex/keyvalue/KeyValueStorage {
 	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$Companion;
 	public abstract fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun put (Ljava/lang/Object;Lkotlinx/serialization/SerializationStrategy;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun putAll (Ljava/util/Collection;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun remove (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun set (Ljava/lang/Object;Ljava/lang/Object;Lkotlinx/serialization/KSerializer;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$Companion {
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$DefaultImpls {
-	public static fun changes (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Ljava/lang/Object;)Lkotlinx/coroutines/flow/Flow;
-	public static fun close (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun containsKey (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun get (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Ljava/lang/Object;Lkotlinx/serialization/DeserializationStrategy;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static fun isEmpty (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun keys (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun values (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
-public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry$Companion;
-	public abstract fun component1 ()Ljava/lang/Object;
-	public abstract fun component2 ()Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue;
-	public abstract fun getInputValue ()Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue;
-	public abstract fun getKey ()Ljava/lang/Object;
-}
-
-public final class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry$Companion {
-}
-
-public final class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry$DefaultImpls {
-	public static fun component1 (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry;)Ljava/lang/Object;
-	public static fun component2 (Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputEntry;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue;
-}
-
-public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue {
-	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue$Companion;
-	public abstract fun getSerializer ()Lkotlinx/serialization/SerializationStrategy;
-	public abstract fun getValue ()Ljava/lang/Object;
-}
-
-public final class com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage$InputValue$Companion {
+public final class com/mooncloak/kodetools/storagex/keyvalue/StringKeyValuePropertyDelegate : kotlin/properties/ReadOnlyProperty {
+	public fun <init> (Ljava/lang/String;Lkotlinx/serialization/KSerializer;Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage;)V
+	public fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Lcom/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueProperty;
+	public synthetic fun getValue (Ljava/lang/Object;Lkotlin/reflect/KProperty;)Ljava/lang/Object;
 }
 

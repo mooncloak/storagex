@@ -1,0 +1,76 @@
+public abstract interface class com/mooncloak/kodetools/storagex/krud/Entity {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/krud/Entity$Companion;
+	public abstract fun getId ()Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/krud/Entity$Companion {
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/krud/MutableRepository : com/mooncloak/kodetools/storagex/krud/Repository {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/krud/MutableRepository$Companion;
+	public abstract fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun insert (Ljava/lang/Object;Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun remove (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun update (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun upsert (Ljava/lang/Object;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/krud/MutableRepository$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/krud/MutableRepository$DefaultImpls {
+	public static fun contains (Lcom/mooncloak/kodetools/storagex/krud/MutableRepository;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun count (Lcom/mooncloak/kodetools/storagex/krud/MutableRepository;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun isEmpty (Lcom/mooncloak/kodetools/storagex/krud/MutableRepository;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun upsert (Lcom/mooncloak/kodetools/storagex/krud/MutableRepository;Ljava/lang/Object;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/krud/MutableRepositoryKt {
+	public static final fun insert (Lcom/mooncloak/kodetools/storagex/krud/MutableRepository;Lcom/mooncloak/kodetools/storagex/krud/Entity;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public abstract interface class com/mooncloak/kodetools/storagex/krud/Repository {
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/krud/Repository$Companion;
+	public abstract fun contains (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun count (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun get (IILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun get (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun isEmpty (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/krud/Repository$Companion {
+}
+
+public final class com/mooncloak/kodetools/storagex/krud/Repository$DefaultImpls {
+	public static fun contains (Lcom/mooncloak/kodetools/storagex/krud/Repository;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static fun count (Lcom/mooncloak/kodetools/storagex/krud/Repository;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun get$default (Lcom/mooncloak/kodetools/storagex/krud/Repository;IILkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static fun isEmpty (Lcom/mooncloak/kodetools/storagex/krud/Repository;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/krud/RepositoryKt {
+	public static final fun getOrNull (Lcom/mooncloak/kodetools/storagex/krud/Repository;Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun isNotEmpty (Lcom/mooncloak/kodetools/storagex/krud/Repository;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public class com/mooncloak/kodetools/storagex/krud/source/InMemorySource : com/mooncloak/kodetools/storagex/krud/MutableRepository {
+	public fun <init> ()V
+	public fun <init> (Ljava/util/Map;)V
+	public synthetic fun <init> (Ljava/util/Map;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
+	public fun clear (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun contains (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun count (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun get (IILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun get (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getAll (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun hashCode ()I
+	public fun insert (Ljava/lang/Object;Lkotlin/jvm/functions/Function0;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun isEmpty (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun remove (Ljava/lang/Object;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun toString ()Ljava/lang/String;
+	public fun update (Ljava/lang/Object;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun upsert (Ljava/lang/Object;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+

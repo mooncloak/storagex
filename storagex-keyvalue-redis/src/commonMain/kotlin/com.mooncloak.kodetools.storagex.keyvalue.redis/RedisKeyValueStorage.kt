@@ -24,13 +24,17 @@ public interface RedisKeyValueStorage : MutableKeyValueStorage<String> {
      * @param [value] The value to set for the [key]. This value can be `null` to clear the cached
      * value.
      */
-    public suspend fun <T : Any> put(
+    public suspend fun <T : Any> set(
         key: String,
         serializer: SerializationStrategy<T>,
         kClass: KClass<T>,
         value: T?,
         expiresIn: Duration
     )
+
+    public suspend fun close()
+
+    public companion object
 }
 
 /**
@@ -39,11 +43,11 @@ public interface RedisKeyValueStorage : MutableKeyValueStorage<String> {
  *
  * @see [MutableKeyValueStorage.put]
  */
-public suspend inline fun <reified T : Any> RedisKeyValueStorage.put(
+public suspend inline fun <reified T : Any> RedisKeyValueStorage.set(
     key: String,
     value: T?,
     expiresIn: Duration
-): Unit = put(
+): Unit = set(
     key = key,
     serializer = serializer<T>(),
     kClass = T::class,

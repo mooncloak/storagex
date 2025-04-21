@@ -1,17 +1,14 @@
 package com.mooncloak.kodetools.storagex.keyvalue.redis
 
 import com.mooncloak.kodetools.storagex.keyvalue.KeyValueStorage
-import com.mooncloak.kodetools.storagex.keyvalue.MutableKeyValueStorage
-import com.mooncloak.kodetools.storagex.keyvalue.invoke
 import io.lettuce.core.RedisClient
 import io.lettuce.core.api.StatefulRedisConnection
 import io.lettuce.core.api.async.RedisAsyncCommands
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.future.await
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerializationStrategy
 import kotlinx.serialization.StringFormat
 import kotlin.reflect.KClass
@@ -38,7 +35,7 @@ public fun KeyValueStorage.Companion.Redis(
 
 internal class RedisKeyValueStorageImpl internal constructor(
     private val client: RedisClient,
-    override val format: StringFormat
+    private val format: StringFormat
 ) : RedisKeyValueStorage {
 
     private val mutex = Mutex(locked = false)
@@ -46,27 +43,23 @@ internal class RedisKeyValueStorageImpl internal constructor(
     private var connection: StatefulRedisConnection<String, String> = client.connect()
     private var cachedCommands = connection.async()
 
-    override suspend fun size(): Long =
-        commands().dbsize().await()
+    override suspend fun count(): Int =
+        commands().dbsize().await().toInt()
 
-    override suspend fun containsKey(key: String): Boolean =
+    override suspend fun contains(key: String): Boolean =
         commands().get(key).await() != null
 
-    override suspend fun getValue(key: String): KeyValueStorage.StoredValue<*> {
-        val rawValue: String = commands().get(key).await()
-            ?: throw NoSuchElementException("No entry found with key '$key'.")
+    override suspend fun <Value : Any> get(key: String, deserializer: KSerializer<Value>): Value? {
+        val rawValue: String = commands().get(key).await() ?: return null
 
-        return KeyValueStorage.StoredValue(
-            rawValue = rawValue,
-            format = format
-        )
+        return format.decodeFromString(deserializer = deserializer, string = rawValue)
     }
 
-    override suspend fun entries(): Set<KeyValueStorage.Entry<String, *>> {
-        throw UnsupportedOperationException("entries() is not supported for the RedisKeyValueStorage.")
+    override fun <Value : Any> flow(key: String, deserializer: KSerializer<Value>): Flow<Value?> {
+        throw UnsupportedOperationException("flow function in JvmRedisKeyValueStorage is not supported.")
     }
 
-    override suspend fun <T : Any> put(
+    override suspend fun <T : Any> set(
         key: String,
         serializer: SerializationStrategy<T>,
         kClass: KClass<T>,
@@ -88,20 +81,8 @@ internal class RedisKeyValueStorageImpl internal constructor(
         }
     }
 
-    override suspend fun <Value : Any> put(
-        key: String,
-        serializer: SerializationStrategy<Value>,
-        value: Value?
-    ): KeyValueStorage.StoredValue<*>? =
+    override suspend fun <Value : Any> set(key: String, value: Value?, serializer: KSerializer<Value>) {
         mutex.withLock {
-            val previousRawValue: String? = commands().get(key).await()
-            val previousStoredValue = previousRawValue?.let {
-                KeyValueStorage.StoredValue(
-                    rawValue = it,
-                    format = format
-                )
-            }
-
             if (value == null) {
                 commands().del(key).await()
             } else {
@@ -112,46 +93,12 @@ internal class RedisKeyValueStorageImpl internal constructor(
 
                 commands().set(key, rawValue).await()
             }
-
-            previousStoredValue
-        }
-
-    override suspend fun <Value> putAll(entries: Collection<MutableKeyValueStorage.InputEntry<String, Value>>) {
-        mutex.withLock {
-            coroutineScope {
-                entries.map { entry ->
-                    async {
-                        val value = entry.inputValue.value
-
-                        if (value == null) {
-                            commands().del(entry.key).await()
-                        } else {
-                            val rawValue = format.encodeToString(
-                                serializer = entry.inputValue.serializer,
-                                value = value
-                            )
-
-                            commands().set(entry.key, rawValue).await()
-                        }
-                    }
-                }.awaitAll()
-            }
         }
     }
 
-    override suspend fun remove(key: String): KeyValueStorage.StoredValue<*>? {
+    override suspend fun remove(key: String) {
         mutex.withLock {
-            val previousRawValue: String? = commands().get(key).await()
-            val previousStoredValue = previousRawValue?.let {
-                KeyValueStorage.StoredValue(
-                    rawValue = it,
-                    format = format
-                )
-            }
-
             commands().del(key).await()
-
-            return previousStoredValue
         }
     }
 

@@ -1,112 +1,114 @@
 package com.mooncloak.kodetools.storagex.keyvalue
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlinx.serialization.SerialFormat
-import kotlinx.serialization.SerializationStrategy
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.StringFormat
 
 /**
- * Creates an instance of the [KeyValueStorage] interface where the underlying values are stored in
- * an in-memory [Map].
+ * An in-memory implementation of [KeyValueStorage] and [MutableKeyValueStorage].
  *
- * @return [KeyValueStorage]
+ * This class provides a simple, in-memory key-value storage solution suitable for testing or applications where data
+ * persistence across sessions is not required. It stores data as strings internally and uses a provided [StringFormat]
+ * for serialization and deserialization of values.
+ *
+ * This implementation is thread-safe, allowing concurrent access and modifications from multiple coroutines. It also
+ * supports observing changes to specific keys via Kotlin Flows.
+ *
+ * @property [format] The [StringFormat] used for serializing and deserializing values to and from strings. Typically,
+ * this will be a JSON format, but other string-based formats are supported.
  */
-@Suppress("FunctionName")
-public fun <Key : Any> KeyValueStorage.Companion.InMemory(): MutableKeyValueStorage<Key> =
-    InMemoryKeyValueStorage(format = EmptySerialFormat)
+public open class InMemoryKeyValueStorage<Key : Any> public constructor(
+    private val format: StringFormat
+) : KeyValueStorage<Key>,
+    MutableKeyValueStorage<Key> {
 
-internal class InMemoryKeyValueStorage<Key : Any> internal constructor(
-    override val format: SerialFormat
-) : MutableKeyValueStorage<Key> {
+    private val storage = mutableMapOf<Key, String>()
 
-    private val map = mutableMapOf<Key, KeyValueStorage.StoredValue<*>>()
+    private val listeners = mutableMapOf<Key, MutableStateFlow<String?>>()
 
     private val mutex = Mutex(locked = false)
+    private val emitMutex = Mutex(locked = false)
 
-    private val changes = MutableStateFlow<Pair<Key, KeyValueStorage.StoredValue<*>?>?>(null)
+    override suspend fun count(): Int = storage.size
 
-    override suspend fun size(): Long = map.size.toLong()
+    override suspend fun contains(key: Key): Boolean = storage.contains(key)
 
-    override suspend fun entries(): Set<KeyValueStorage.Entry<Key, *>> =
-        map.entries.map {
-            KeyValueStorage.Entry(
-                key = it.key,
-                storedValue = it.value
-            )
-        }.toSet()
+    override suspend fun <Value : Any> get(key: Key, deserializer: KSerializer<Value>): Value? {
+        val stored = storage[key] ?: return null
 
-    override suspend fun getValue(key: Key): KeyValueStorage.StoredValue<*> =
-        map[key] ?: throw NoSuchElementException("No entry found with key '$key'.")
+        return format.decodeFromString(
+            deserializer = deserializer,
+            string = stored
+        )
+    }
 
-    override suspend fun containsKey(key: Key): Boolean = map.contains(key)
-
-    override suspend fun <Value : Any> put(
-        key: Key,
-        serializer: SerializationStrategy<Value>,
-        value: Value?
-    ): KeyValueStorage.StoredValue<*>? {
+    override suspend fun <Value : Any> set(key: Key, value: Value?, serializer: KSerializer<Value>) {
         mutex.withLock {
             if (value == null) {
-                val previousValue = map.remove(key)
+                storage.remove(key)
 
-                changes.value = key to null
-
-                return previousValue
+                emit(key = key, value = null)
             } else {
-                val previousValue = map[key]
-
-                val storedValue = KeyValueStorage.StoredValue(
-                    rawValue = value,
-                    format = format
+                val stored = format.encodeToString(
+                    serializer = serializer,
+                    value = value
                 )
 
-                map[key] = storedValue
+                storage[key] = stored
 
-                changes.value = key to storedValue
-
-                return previousValue
+                emit(key = key, value = stored)
             }
         }
     }
 
-    override suspend fun <Value> putAll(entries: Collection<MutableKeyValueStorage.InputEntry<Key, Value>>) {
+    override suspend fun remove(key: Key) {
         mutex.withLock {
-            entries.forEach { entry ->
-                val storedValue = KeyValueStorage.StoredValue(
-                    rawValue = entry.inputValue.value,
-                    format = format
-                )
+            storage.remove(key)
 
-                map[entry.key] = storedValue
-
-                changes.value = entry.key to storedValue
-            }
+            emit(key = key, value = null)
         }
     }
-
-    override suspend fun remove(key: Key): KeyValueStorage.StoredValue<*>? =
-        mutex.withLock {
-            val removedValue = map.remove(key = key)
-
-            changes.value = key to null
-
-            removedValue
-        }
 
     override suspend fun clear() {
         mutex.withLock {
-            if (map.isEmpty()) return
+            val currentKeys = storage.keys
 
-            val existingItems = map.toMap()
+            storage.clear()
 
-            map.clear()
-
-            existingItems.forEach { entry ->
-                changes.emit(entry.key to entry.value)
+            currentKeys.forEach { key ->
+                emit(key = key, value = null)
             }
+        }
+    }
 
-            changes.value
+    override fun <Value : Any> flow(key: Key, deserializer: KSerializer<Value>): Flow<Value?> {
+        val flow = listeners[key] ?: MutableStateFlow<String?>(null).apply {
+            value = storage[key]
+        }
+
+        listeners[key] = flow
+
+        return flow.map { stored ->
+            if (stored != null) {
+                format.decodeFromString(
+                    deserializer = deserializer,
+                    string = stored
+                )
+            } else {
+                null
+            }
+        }
+    }
+
+    private suspend fun emit(key: Key, value: String?) {
+        emitMutex.withLock {
+            val listener = listeners[key]
+
+            listener?.value = value
         }
     }
 
@@ -115,20 +117,22 @@ internal class InMemoryKeyValueStorage<Key : Any> internal constructor(
         if (other !is InMemoryKeyValueStorage<*>) return false
 
         if (format != other.format) return false
-        if (map != other.map) return false
+        if (storage != other.storage) return false
+        if (listeners != other.listeners) return false
         if (mutex != other.mutex) return false
 
-        return changes == other.changes
+        return emitMutex == other.emitMutex
     }
 
     override fun hashCode(): Int {
         var result = format.hashCode()
-        result = 31 * result + map.hashCode()
+        result = 31 * result + storage.hashCode()
+        result = 31 * result + listeners.hashCode()
         result = 31 * result + mutex.hashCode()
-        result = 31 * result + changes.hashCode()
+        result = 31 * result + emitMutex.hashCode()
         return result
     }
 
     override fun toString(): String =
-        "InMemoryKeyValueStorage(format=$format, map=$map, mutex=$mutex, changes=$changes)"
+        "InMemoryKeyValueStorage(format=$format, storage=$storage, listeners=$listeners, mutex=$mutex, emitMutex=$emitMutex)"
 }

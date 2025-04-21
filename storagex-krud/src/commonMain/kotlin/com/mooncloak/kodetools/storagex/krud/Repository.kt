@@ -19,6 +19,12 @@ public interface Repository<ID : Any, Value : Any> {
         getAll().size
 
     /**
+     * Returns `true` if the [Repository] is empty, `false` otherwise.
+     */
+    public suspend fun isEmpty(): Boolean =
+        count() == 0
+
+    /**
      * Checks if an item with the given [id] exists.
      *
      * This function checks if an item with the specified [id] is present.
@@ -75,6 +81,13 @@ public interface Repository<ID : Any, Value : Any> {
 
     public companion object
 }
+
+/**
+ * Returns `true` if the [Repository] is NOT empty, `false` otherwise. This is the inverse of
+ * the [Repository.isEmpty] function, provided for convenience.
+ */
+public suspend inline fun <ID : Any, Value : Any> Repository<ID, Value>.isNotEmpty(): Boolean =
+    !isEmpty()
 
 /**
  * Retrieves the item with the provided [id], or `null` if no item with the provided [id] exists.

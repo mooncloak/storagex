@@ -26,7 +26,6 @@ public synthetic class com/mooncloak/kodetools/storagex/keyvalue/redis/RedisConf
 	public final fun getDescriptor ()Lkotlinx/serialization/descriptors/SerialDescriptor;
 	public final fun serialize (Lkotlinx/serialization/encoding/Encoder;Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisConfig;)V
 	public synthetic fun serialize (Lkotlinx/serialization/encoding/Encoder;Ljava/lang/Object;)V
-	public fun typeParametersSerializers ()[Lkotlinx/serialization/KSerializer;
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/redis/RedisConfig$Companion {
@@ -38,16 +37,15 @@ public final class com/mooncloak/kodetools/storagex/keyvalue/redis/RedisConfigKt
 }
 
 public abstract interface class com/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage : com/mooncloak/kodetools/storagex/keyvalue/MutableKeyValueStorage {
-	public abstract fun put-myKFqkg (Ljava/lang/String;Lkotlinx/serialization/SerializationStrategy;Lkotlin/reflect/KClass;Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final field Companion Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage$Companion;
+	public abstract fun close (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun set-myKFqkg (Ljava/lang/String;Lkotlinx/serialization/SerializationStrategy;Lkotlin/reflect/KClass;Ljava/lang/Object;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class com/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage$Companion {
 }
 
 public final class com/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage$DefaultImpls {
-	public static fun changes (Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage;Ljava/lang/String;)Lkotlinx/coroutines/flow/Flow;
-	public static fun close (Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun containsKey (Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun get (Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage;Ljava/lang/String;Lkotlinx/serialization/DeserializationStrategy;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public static fun isEmpty (Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun keys (Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public static fun values (Lcom/mooncloak/kodetools/storagex/keyvalue/redis/RedisKeyValueStorage;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

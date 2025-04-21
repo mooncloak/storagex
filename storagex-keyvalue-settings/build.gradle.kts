@@ -4,7 +4,7 @@ plugins {
     kotlin("plugin.serialization")
     id("com.android.library")
     id("org.jetbrains.dokka")
-    id("storagex.multiplatform")
+    id("storagex.compose")
     id("storagex.publish")
 }
 
@@ -22,6 +22,8 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                api(project(":storagex-keyvalue"))
+
                 // Coroutines
                 // https://github.com/Kotlin/kotlinx.coroutines
                 implementation(KotlinX.coroutines.core)
@@ -33,6 +35,14 @@ kotlin {
                 // Time
                 // https://github.com/Kotlin/kotlinx-datetime
                 implementation(KotlinX.datetime)
+
+                // Multiplatform Key/Value Storage
+                // https://github.com/russhwolf/multiplatform-settings
+                // Apache 2.0: https://github.com/russhwolf/multiplatform-settings/blob/main/LICENSE.txt
+                api(RussHWolf.multiplatformSettings.settings)
+                api(RussHWolf.multiplatformSettings.noArg)
+                implementation(RussHWolf.multiplatformSettings.coroutines)
+                implementation(RussHWolf.multiplatformSettings.serialization)
             }
         }
 
@@ -46,7 +56,7 @@ kotlin {
 
 android {
     compileSdk = LibraryConstants.Android.compileSdkVersion
-    namespace = "com.mooncloak.kodetools.storagex.keyvalue"
+    namespace = "com.mooncloak.kodetools.storagex.keyvalue.settings"
 
     defaultConfig {
         minSdk = LibraryConstants.Android.minSdkVersion

@@ -4,7 +4,9 @@ plugins {
     kotlin("plugin.serialization")
     id("com.android.library")
     id("org.jetbrains.dokka")
-    id("storagex.multiplatform")
+    id("org.jetbrains.compose")
+    id("org.jetbrains.kotlin.plugin.compose")
+    id("storagex.compose")
     id("storagex.publish")
 }
 
@@ -22,6 +24,8 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                api(project(":storagex-keyvalue"))
+
                 // Coroutines
                 // https://github.com/Kotlin/kotlinx.coroutines
                 implementation(KotlinX.coroutines.core)
@@ -33,6 +37,8 @@ kotlin {
                 // Time
                 // https://github.com/Kotlin/kotlinx-datetime
                 implementation(KotlinX.datetime)
+
+                implementation(compose.runtime)
             }
         }
 
@@ -46,7 +52,7 @@ kotlin {
 
 android {
     compileSdk = LibraryConstants.Android.compileSdkVersion
-    namespace = "com.mooncloak.kodetools.storagex.keyvalue"
+    namespace = "com.mooncloak.kodetools.storagex.keyvalue.compose"
 
     defaultConfig {
         minSdk = LibraryConstants.Android.minSdkVersion

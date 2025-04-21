@@ -35,6 +35,9 @@ plugins {
 rootProject.name = "storagex"
 
 include(":storagex-keyvalue")
+include(":storagex-keyvalue-settings")
+include(":storagex-keyvalue-compose")
+include(":storagex-keyvalue-cache")
 include(":storagex-keyvalue-redis")
 include(":storagex-krud")
 // TODO: include(":storagex-kwery")

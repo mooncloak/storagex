@@ -22,6 +22,8 @@ kotlin {
 
         val commonMain by getting {
             dependencies {
+                api(project(":storagex-keyvalue"))
+
                 // Coroutines
                 // https://github.com/Kotlin/kotlinx.coroutines
                 implementation(KotlinX.coroutines.core)
@@ -41,12 +43,28 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+
+        val androidMain by getting {
+            dependencies {
+                // Caching - Contains LRU cache
+                implementation("androidx.core:core:_")
+            }
+        }
+
+        val jvmMain by getting {
+            dependencies {
+                // Caching - Caffeine
+                // https://github.com/ben-manes/caffeine
+                // Apache 2.0: https://github.com/ben-manes/caffeine/blob/master/LICENSE
+                implementation("com.github.ben-manes.caffeine:caffeine:_")
+            }
+        }
     }
 }
 
 android {
     compileSdk = LibraryConstants.Android.compileSdkVersion
-    namespace = "com.mooncloak.kodetools.storagex.keyvalue"
+    namespace = "com.mooncloak.kodetools.storagex.keyvalue.cache"
 
     defaultConfig {
         minSdk = LibraryConstants.Android.minSdkVersion

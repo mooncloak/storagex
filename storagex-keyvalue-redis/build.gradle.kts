@@ -82,11 +82,4 @@ android {
             )
         }
     }
-
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-    sourceSets["main"].java.srcDirs("src/androidMain/kotlin")
-    sourceSets["main"].res.srcDirs("src/androidMain/res")
-
-    sourceSets["test"].java.srcDirs("src/androidTest/kotlin")
-    sourceSets["test"].res.srcDirs("src/androidTest/res")
 }

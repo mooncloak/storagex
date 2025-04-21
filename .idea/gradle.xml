@@ -15,6 +15,7 @@
             </builds>
           </compositeBuild>
         </compositeConfiguration>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
@@ -24,7 +25,6 @@
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/storagex-keyvalue" />
             <option value="$PROJECT_DIR$/storagex-keyvalue-redis" />
-            <option value="$PROJECT_DIR$/storagex-pagination" />
           </set>
         </option>
         <option name="resolveExternalAnnotations" value="false" />

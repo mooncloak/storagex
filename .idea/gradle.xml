@@ -24,10 +24,15 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/storagex-keyvalue" />
+            <option value="$PROJECT_DIR$/storagex-keyvalue-cache" />
+            <option value="$PROJECT_DIR$/storagex-keyvalue-compose" />
             <option value="$PROJECT_DIR$/storagex-keyvalue-redis" />
+            <option value="$PROJECT_DIR$/storagex-keyvalue-settings" />
+            <option value="$PROJECT_DIR$/storagex-krud" />
+            <option value="$PROJECT_DIR$/storagex-skema" />
+            <option value="$PROJECT_DIR$/storagex-sqldelight-core" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
